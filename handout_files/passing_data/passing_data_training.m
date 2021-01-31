@@ -36,7 +36,39 @@ time_steps = [0:h:T]';
 %   from Simulink, and finally plot data.
 
 % your code goes here
+travel_ref_series = timeseries(x_travel_ref, time_steps);
+elevation_ref_series = timeseries(x_elevation_ref, time_steps);
 
+loaded_data = load('dummy_data.mat');
+data = loaded_data.dummy_data;
+
+subplot(2,1,1);
+% Top plot
+hold on
+plot(data(1,:), data(3,:), 'DisplayName', 'Elevation ref')
+plot(data(1,:), data(5,:), 'DisplayName', 'Elevation')
+
+legend
+title('Elevation')
+ylabel('Elevation [rad]')
+xlabel('Time [s]')
+grid on 
+
+% Bottom plot
+subplot(2,1,2);
+hold on 
+plot(data(1,:), data(2,:), 'DisplayName', 'Elevation ref')
+plot(data(1,:), data(4,:), 'DisplayName', 'Elevation')
+
+title('Travel')
+ylabel('Travel [rad]')
+xlabel('Time [s]')
+legend
+grid on
+
+% Save figure
+% saveas(gcf,'DummyPlot.eps')
+% saveas(gcf,'DummyPlot_png.png')
 
 %% Fake-model parameters (You should not change this part)
 A = [-0.98, 0; 0, -0.9];
