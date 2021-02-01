@@ -9,9 +9,8 @@ close all;
 clc;
 
 % The encoder for travel for Helicopter 2 is different from the rest.
-travel_gain = -2; %
-elevation_gain = -1; %
-
+travel_gain = 1; %
+elevation_gain = 1; %
 
 %% Physical constants
 m_h = 0.4; % Total mass of the motors.
@@ -25,8 +24,8 @@ J_p = 2 * ( m_h/2 * l_h * l_h);   % Moment of interia for pitch
 J_t = 2 * m_h * l_a *l_a;         % Moment of interia for travel
 
 % Identified voltage sum and difference
-V_s_eq = 6.0; % Identified equilibrium voltage sum.
-V_d_eq = 0.8; % Identified equilibrium voltage difference. Updated Spring 2019. Old: 0.4
+V_s_eq = 6.7;% 4.7; % Identified equilibrium voltage sum.
+V_d_eq = -0.1;% 0.0; % Identified equilibrium voltage difference.
 
 % Model parameters
 K_p = m_g*9.81; % Force to lift the helicopter from the ground.

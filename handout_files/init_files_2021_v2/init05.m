@@ -24,8 +24,8 @@ J_p = 2 * ( m_h/2 * l_h * l_h);   % Moment of interia for pitch
 J_t = 2 * m_h * l_a *l_a;         % Moment of interia for travel
 
 % Identified voltage sum and difference
-V_s_eq = 4.7; % Identified equilibrium voltage sum.
-V_d_eq = 0.0; % Identified equilibrium voltage difference.
+V_s_eq = 8.1;%6.4; % Identified equilibrium voltage sum.
+V_d_eq = 0.2;%0.7; % Identified equilibrium voltage difference.
 
 % Model parameters
 K_p = m_g*9.81; % Force to lift the helicopter from the ground.
@@ -64,7 +64,7 @@ end
 
 %% Elevation closed loop analysis
 % Controller parameters
-w_e = 0.8; % Elevation controller bandwidth.
+w_e = 0.5; % Elevation controller bandwidth.
 d_e = 1.0; % Elevation controller rel. damping.
 K_ep = w_e^2/K_3;
 K_ed = 2*d_e*sqrt(K_ep/K_3);
