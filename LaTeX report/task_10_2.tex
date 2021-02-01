@@ -1,10 +1,66 @@
 \section{10.2 - Optimal Control of Pitch/Travel without Feedback }
 
 \subsection{The continuous model}
-\textit{Answer 10.2.1.1}
+\textit{Answer 10.2.1.1} \todo{REMOVE}\\
+Since the task were to control the pitch and travel, the elevation was not a part of the system model. The system's state was therefore described by: 
+\begin{equation}\label{eq:lab2_state}
+	\bm x = 
+	\begin{bmatrix}
+		\lambda & r & p & \dot p
+	\end{bmatrix}
+\end{equation}
+
+The dynamic equations for the system was given in the problem description. The following equations were given:
+\begin{subequations} 
+	\begin{align}
+		\dot \lambda &= r \\
+		\dot r &= -K_2 p, \quad K_2 = \frac{K_p l_a}{J_t}\\
+		\dot p &= \dot p \\
+		\ddot p &= -K_1 K_{pd} \dot p - K_1 K_{pp} p + K_1 K_{pp} pc, \quad K_1 = \frac{K_f l_h}{J_p}
+	\end{align}
+\end{subequations}
+The state-space form of the system therefore becomes: 
+\begin{equation}\label{eq:lab2_cont_ss}
+	\underbrace{\begin{bmatrix}
+		\dot \lambda \\
+		\dot r \\
+		\dot p \\
+		\ddot p
+	\end{bmatrix}}_{\bm{\dot x}} = 
+	\underbrace{
+	\begin{bmatrix}
+		0 & 1 & 0 & 0 \\
+		0 & 0 & -K_2 & 0 \\
+		0 & 0 & 0 & 1 \\
+		0 & 0 & -K_1 K_{pp} &  -K_1 K_{pd}
+	\end{bmatrix}
+	}_{\bm A_c} \bm x + 
+	\underbrace{
+		\begin{bmatrix}
+			0 \\ 0 \\ 0 \\ K_1 K_{pp}
+		\end{bmatrix}
+	}_{\bm B_c} \underbrace{p_c}_{u}
+\end{equation}
 
 \subsection{The discretized model}
-\textit{Answer 10.2.1.2. Remember to document the calculations.}
+\textit{Answer 10.2.1.2. Remember to document the calculations.} \todo{Remove} \\
+\subsubsection{Discretizing model}
+Forward Euler method is given by: 
+\begin{equation}\label{eq:lab2_forward_euler}
+	\bm{x}[k + 1] = \bm I \bm x[k] + T\bm{A_c x}[k] + T\bm B_c
+\end{equation}, where $ T $ is the timestep \todo[inline]{timestep in the discretization??}\todo[inline]{Add reference to linsys slides}.
+Reformulating this, we can write:
+\begin{equation}\label{eq:lab2_discrete_system}
+	\bm{x}_{k + 1} = \underbrace{(\bm I - T \bm A_c)}_{\bm A} \bm{x}_{k} + \underbrace{T \bm B_c}_{\bm B} u_k
+\end{equation}
+
+\subsubsection{Checking stability}
+The stability condition for \cref{eq:lab2_discrete_system} is:
+\begin{equation}\label{eq:lab2_stab_condition}
+	|1 + T \lambda| \leq 1
+\end{equation}, where $ \lambda $ is an eigenvalue of $ \bm A $ in \cref{eq:lab2_discrete_system}. 
+Using MATLAB we found the eigenvalues of $ \bm A $ to be ... \todo[inline]{Add Matlab appendix}
+\todo[inline]{find eigenvalues}
 
 \subsection{The open loop optimization problem}
 \textit{How is it formulated?}
