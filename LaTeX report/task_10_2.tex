@@ -58,7 +58,7 @@ Forward Euler method is given by:
 \end{equation}, where $ T $ is the timestep \todo[inline]{timestep in the discretization??}\todo[inline]{Add reference to linsys slides}.
 Reformulating this, we can write:
 \begin{equation}\label{eq:lab2_discrete_system}
-	\bm{x}_{k + 1} = \underbrace{(\bm I - T \bm A_c)}_{\bm A} \bm{x}_{k} + \underbrace{T \bm B_c}_{\bm B} u_k
+	\bm{x}_{k + 1} = \underbrace{(\bm I + T \bm A_c)}_{\bm A} \bm{x}_{k} + \underbrace{T \bm B_c}_{\bm B} u_k
 \end{equation}
 
 \subsubsection{Checking stability}
