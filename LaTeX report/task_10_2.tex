@@ -1,14 +1,17 @@
 \section{10.2 - Optimal Control of Pitch/Travel without Feedback }
 
-\subsection{The continuous model}
-\textit{Answer 10.2.1.1} \todo{REMOVE}\\
-Since the task were to control the pitch and travel, the elevation was not a part of the system model. The system's state was therefore described by: 
+\subsection{Derivation of a continous time state space model}
+In this part of the exercise we will disregard elevation, therefore we assume $ e = 0 $ and do include it in the model.
+
+The state-vector, $\bm x$ is defined as:
 \begin{equation}\label{eq:lab2_state}
 	\bm x = 
 	\begin{bmatrix}
 		\lambda & r & p & \dot p
 	\end{bmatrix}
+	^T ,
 \end{equation}
+where $\lambda$ is travel, $r$ is speed of travel (travelrate), $p$ is pitch and $\dot{p}$ is pitchrate.
 
 The dynamic equations for the system was given in the problem description. The following equations were given:
 \begin{subequations} 
@@ -34,7 +37,11 @@ The state-space form of the system therefore becomes:
 		0 & 0 & 0 & 1 \\
 		0 & 0 & -K_1 K_{pp} &  -K_1 K_{pd}
 	\end{bmatrix}
-	}_{\bm A_c} \bm x + 
+	}_{\bm A_c}
+	\begin{bmatrix}
+		\lambda \\ r \\ p \\ \dot{p} \\
+	\end{bmatrix}
+	+
 	\underbrace{
 		\begin{bmatrix}
 			0 \\ 0 \\ 0 \\ K_1 K_{pp}
@@ -45,7 +52,7 @@ The state-space form of the system therefore becomes:
 \subsection{The discretized model}
 \textit{Answer 10.2.1.2. Remember to document the calculations.} \todo{Remove} \\
 \subsubsection{Discretizing model}
-Forward Euler method is given by: 
+Forward Euler method is given by:
 \begin{equation}\label{eq:lab2_forward_euler}
 	\bm{x}[k + 1] = \bm I \bm x[k] + T\bm{A_c x}[k] + T\bm B_c
 \end{equation}, where $ T $ is the timestep \todo[inline]{timestep in the discretization??}\todo[inline]{Add reference to linsys slides}.
