@@ -49,6 +49,25 @@ The state-space form of the system therefore becomes:
 	}_{\bm B_c} \underbrace{p_c}_{u}
 \end{equation}
 
+\subsubsection{Stability and eigenvalues}
+The properties of this system is dependent on physical constants ($l_a, J_t, ...$) and control parameters ($K_{pp}, K_{pd}$).
+
+Symbolic expressions in Matlab shows that the eigenvalues of A are:
+\begin{equation}
+	\lambda = \pm \frac{1}{2} \times \left( \sqrt{-K1 \times (-K1*K_{pd}^2 + 4*Kpp)} - K1*K_{pd} \right)
+\end{equation}
+
+The eigenvalues of the continous model, with $K_{pp} = 0,1 , K_{pd} = 0,4$ are:
+\begin{equation}\label{eq:lab2_ss_c_eigenvalues_example}
+	\begin{bmatrix}
+		0 \\ 0 \\ -0.26 + 0.24i \\ -0.26 - 0.24 \\
+	\end{bmatrix}
+\end{equation}
+
+\todo{Make a plot showing stability dependent on control parameters? Or an analytical description.}
+
+
+
 \subsection{The discretized model}
 \textit{Answer 10.2.1.2. Remember to document the calculations.} \todo{Remove} \\
 \subsubsection{Discretizing model}
