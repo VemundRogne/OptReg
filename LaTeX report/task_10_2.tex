@@ -84,7 +84,7 @@ Reformulating this, we can write:
 The stability condition for \cref{eq:lab2_discrete_system} is:
 \begin{equation}\label{eq:lab2_stab_condition}
 	|1 + T \lambda| \leq 1
-\end{equation}, where $ \lambda $ is an eigenvalue of $ \bm A $ in \cref{eq:lab2_discrete_system}. 
+\end{equation}, where $ \lambda $ is an eigenvalue of $ \bm A_c $ in \cref{eq:lab2_discrete_system}. 
 \todo[inline]{Where is this equation from? I believe that it works, but we should either derive it or reference where we found it. ANSWER: From linsys slides, see above}
 Using MATLAB we found the eigenvalues of $ \bm A $ to be ... \todo[inline]{Add Matlab appendix}
 \todo[inline]{find eigenvalues}
@@ -94,6 +94,13 @@ Using MATLAB we found the eigenvalues of $ \bm A $ to be ... \todo[inline]{Add M
 
 \subsection{The weights of the optimization problem}
 \textit{Try using the values 0.1, 1 and 10 as weights q. Plot the manipulated variable and the output. Comment the results with respect to the different weights chosen.}
+% TODO: \usepackage{graphicx} required
+\begin{figure}
+	\centering
+	\includegraphics[width=\linewidth]{figures/lab2_optimal_u}
+	\caption{Manipulated variable and outputs with different values of $q$.}
+	\label{fig:lab2optimalu}
+\end{figure}
 
 \subsection{The objective function}
 \textit{Furthermore, discuss the objective function (15) (in the lab assignment text) in particular the term $(\lambda_i-\lambda_f )^2$. For instance, could any unwanted effects arise from steering the helicopter to $\lambda =\lambda_f$ with this objective function?}
