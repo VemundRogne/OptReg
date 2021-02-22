@@ -1,7 +1,17 @@
 import scipy.io
 import pandas as pd
 import numpy as np
+
 import matplotlib.pyplot as plt
+
+import matplotlib
+matplotlib.use("pgf")
+matplotlib.rcParams.update({
+    "pgf.texsystem": "pdflatex",
+    'font.family': 'serif',
+    'text.usetex': True,
+    'pgf.rcfonts': False,
+})
 
 import debug
 
@@ -36,4 +46,5 @@ def open_mat(
 
 df = open_mat(file_name="LAB2/lab2_without_pitch_offset.mat", names=["Travel"])
 df.plot()
-plt.show()
+plt.savefig('test_figure.pgf')
+#plt.show()
