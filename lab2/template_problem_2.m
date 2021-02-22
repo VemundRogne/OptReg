@@ -3,7 +3,7 @@
 % Updated spring 2018, Andreas L. Flåten
 
 %% Initialization and model definition
-init06; % Change this to the init file corresponding to your helicopter
+init05; % Change this to the init file corresponding to your helicopter
 
 % Continous time model
 Ac = [0, 1,       0,       0;
@@ -61,7 +61,7 @@ Q1(1,1) = 1;                            % Weight on state x1
 Q1(2,2) = 0;                            % Weight on state x2
 Q1(3,3) = 0;                            % Weight on state x3
 Q1(4,4) = 0;                            % Weight on state x4
-P1 = 0.1;                                % Weight on input
+P1 = 1;                                % Weight on input
 Q = gen_q(Q1,P1,N,M);                  % Generate Q, hint: gen_q
 % The constant linear term is zero in our case
 c = zeros(size(Q, 2), 1);              % Generate c, this is the linear constant term in the QP
