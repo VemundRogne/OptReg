@@ -319,3 +319,6 @@ codegen/
 
 # Octave session info
 octave-workspace
+
+# Quarc build objects
+*quarc_win64*
