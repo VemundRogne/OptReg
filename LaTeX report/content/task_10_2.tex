@@ -68,21 +68,22 @@ The eigenvalues of the continous model, with $K_{pp} = 0,1 , K_{pd} = 0,4$ are:
 	\end{bmatrix}
 \end{equation}
 
-\todo{Make a plot showing stability dependent on control parameters? Or an analytical description.}
+% ------------------- DISCRETIZING THE MODEL ------------------------
+\subsection{Discretizing the continous time model}
+A discretized model is required for generating an optimal trajectory. \textit{[...] continous time models require quite different solution methods} \cite{FossHeirung}
 
-
-
-\subsection{The discretized model}
-\textit{Answer 10.2.1.2. Remember to document the calculations.} \todo{Remove} \\
-\subsubsection{Discretizing model}
-Forward Euler method is given by:
+We will discretize the model using the forward Euler method, which is given by:
 \begin{equation}\label{eq:lab2_forward_euler}
-	\bm{x}[k + 1] = \bm I \bm x[k] + T\bm{A_c x}[k] + T\bm B_c
-\end{equation}, where $ T $ is the timestep \todo[inline]{timestep in the discretization??}\todo[inline]{Add reference to linsys slides}.
+	\bm{x}[k + 1] = \bm I \bm x[k] + T\bm{A_c x}[k] + T\bm B_c ,
+\end{equation}
+where $ T $ is the timestep \todo[inline]{timestep in the discretization??}\todo
+[inline]{Add reference to linsys slides}.
 Reformulating this, we can write:
 \begin{equation}\label{eq:lab2_discrete_system}
-	\bm{x}_{k + 1} = \underbrace{(\bm I + T \bm A_c)}_{\bm A} \bm{x}_{k} + \underbrace{T \bm B_c}_{\bm B} u_k
+	\bm{x}_{k + 1} = \underbrace{(\bm I + T \bm A_c)}_{\bm A_d} \bm{x}_{k} + \underbrace{T \bm B_c}_{\bm B_d} u_k
 \end{equation}
+
+
 
 \subsubsection{Checking stability}
 The stability condition for \cref{eq:lab2_discrete_system} is:
@@ -96,10 +97,26 @@ Using MATLAB we found the eigenvalues of $ \bm A $ to be ... \todo[inline]{Add M
 \subsection{The open loop optimization problem}
 \textit{How is it formulated?}
 
+The optimization problem is to calculate an optimal trajectory for moving the helicopter from $\lambda_0 = \pi$ to $\lambda_f = 0$ by manipulating the input, $p_k$, of the pitch controller.
+
+We also have a constraint on the input to the pitch controller:
+\begin{equation}
+	\left\lvert p_k \right\rvert \le \frac{30}{180} \pi, k \in \left\{ 1, ..., N \right\} 
+\end{equation}
+this constraint says that the pitch-reference, $p_k$ can not exceed 30 degrees in either direction.
+
+Our objective function (the cost function we wish to minimize) is given as:
+\begin{equation}
+	\phi = \sum_{i=0}^{N-1} \left( \lambda_{i+1} - \lambda_f \right)^2 + qp_{ci}^2 , q \ge 0
+\end{equation}
+where $q$ is the weight of input-usage.
+
 \subsection{The weights of the optimization problem}
 \textit{Try using the values 0.1, 1 and 10 as weights q. Plot the manipulated variable and the output. Comment the results with respect to the different weights chosen.}
-% TODO: \usepackage{graphicx} required
-\begin{figure}
+
+Weighing the input higher by increasing the value of $q$ means that we are placing a higher cost of input - reducing the input usage. This will in turn mean that the cost of deviation in $\lambda$ is in relation to the input, cheaper. The result is lower input usage and a slower response. This is exactly what is seen in \cref{fig:lab2optimalu}.
+
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=\linewidth]{figures/lab2_optimal_u}
 	\caption{Manipulated variable and outputs with different values of $q$.}
