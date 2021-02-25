@@ -1,0 +1,14 @@
+{
+    "files.exclude": {
+        "**/*.aux": true,
+        "**/*.bbl": true,
+        "**/*.blg": true,
+        "**/*.fdb_latexmk": true,
+        "**/*.fls": true,
+        "**/*.gz": true,
+        "**/*.toc": true
+    },
+    "latex-workshop.latex.recipe.default": "lastUsed",
+    "latex-workshop.latex.option.maxPrintLine.enabled": false,
+    "latex-workshop.latex.rootFile.doNotPrompt": true
+}

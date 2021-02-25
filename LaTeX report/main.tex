@@ -1,45 +1,36 @@
-\documentclass{article} % change ``USenglish'' to ``norsk'' if applicable.
+\documentclass{article}
 \usepackage{preamble}
 
-%% To easily include matlab code, I would recommend to have a look at this answer https://tex.stackexchange.com/a/158816 which has nice examples.
-
-%% It uses: https://ctan.org/pkg/matlab-prettifier
+\title{OptReg lab report}
+\author{Group ??\\Vemund Rogne\\Jørgen Haaland}
 
 \begin{document}
 
-% Titlepage
-\title{LaTeX Lab Report Skeleton}
-\author{Group ??\\Vemund Rogne\\Jørgen Haaland}
-\date{January 1, 1970}
-\begin{titlepage}
-    \maketitle
-    \begin{figure}
-    \centering
-    \includegraphics[width=0.5\textwidth]{figures/itk_ntnu}\\
-    Department of Engineering Cybernetics
-    \end{figure}
-    \thispagestyle{empty}
-\end{titlepage}
-
-% TOC
-\newpage
-\tableofcontents
-\thispagestyle{empty} % Avoid page numbering on the table of contents.
-
+\subfile{content/preamble.tex}
 
 % Main content
 \newpage
 \setcounter{page}{1}
-\include{evaluation_info} % <--- delete/comment this before handing in the final PDF!
-\include{task_10_2}
-\include{task_10_3}
-\include{task_10_4}
+
+
+\subfile{content/task_10_2}
+\clearpage
+
+
+\subfile{content/task_10_3}
+\clearpage
+
+
+\subfile{content/task_10_4}
+\clearpage
+
 
 \begin{figure}
     \begin{center}
         \input{../test_figure.pgf}
     \end{center}
 \end{figure}
+
 
 % References
 \newpage
