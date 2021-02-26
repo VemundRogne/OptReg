@@ -111,6 +111,13 @@ Our objective function (the cost function we wish to minimize) is given as:
 \end{equation}
 where $q$ is the weight of input-usage.
 
+\todo[inline] {Add the steps in our formulation. How we get to the quadprog-formulation:} 
+\begin{itemize}
+	\item How the model is formulated
+	\item How we formulate it as a QP problem with z
+	\item What out constraints are (equality $ A_{eq} z = B_{eq} $, inequality: $ u_{low} < ... $)
+\end{itemize}
+
 \subsection{The weights of the optimization problem}
 \textit{Try using the values 0.1, 1 and 10 as weights q. Plot the manipulated variable and the output. Comment the results with respect to the different weights chosen.}
 
@@ -125,6 +132,7 @@ Weighing the input higher by increasing the value of $q$ means that we are placi
 
 \subsection{The objective function}
 \textit{Furthermore, discuss the objective function (15) (in the lab assignment text) in particular the term $(\lambda_i-\lambda_f )^2$. For instance, could any unwanted effects arise from steering the helicopter to $\lambda =\lambda_f$ with this objective function?}
+
 
 \subsection{Experimental results}
 \textit{Printouts of data from relevant experiments (plots).
