@@ -101,7 +101,11 @@ x1  = [pi*unit_padding; x1; zero_padding];
 x2  = [zero_padding; x2; zero_padding];
 x3  = [zero_padding; x3; zero_padding];
 x4  = [zero_padding; x4; zero_padding];
+x = [x1 x2 x3 x4];
 
+timesteps = 0:delta_t:delta_t*(length(u)-1);
+u_opt = timeseries(u, timesteps);
+x_opt = timeseries(x, timesteps);
 %% Calculating feedback gain 
 Q = diag([1, 1, 1, 1]);
 R = 1;
