@@ -12,3 +12,6 @@ def debug(func):
         print(f"{func.__name__!r} returned \r\n{value!r}")           # 4
         return value
     return wrapper_debug
+
+
+import hephaestus.open_matfiles
