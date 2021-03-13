@@ -1,7 +1,7 @@
 clc
 clear all
 %% Initialization and model definition
-init05; % Change this to the init file corresponding to your helicopter
+init06; % Change this to the init file corresponding to your helicopter
 
 % Continous time model
 Ac = [0, 1,       0,       0;
@@ -107,6 +107,54 @@ timesteps = 0:delta_t:delta_t*(length(u)-1);
 u_opt = timeseries(u, timesteps);
 x_opt = timeseries(x, timesteps);
 %% Calculating feedback gain 
-Q = diag([1, 1, 1, 1]);
-R = 1;
-[K, S, e] = dlqr(A1, B1, Q, R);
+R_values = [0.01, 0.1, 1, 10];
+Q_values = {
+    diag([0.1, 1, 1 1]),
+    diag([10, 1, 1, 1]),
+    diag([100, 1, 1, 1]),
+    diag([1, 0.1, 1, 1]),
+    diag([1, 10, 1, 1]),
+    diag([1, 100, 1, 1]),
+    diag([1, 1, 0.1, 1]),
+    diag([1, 1, 10, 1]),
+    diag([1, 1, 100, 1]),
+    diag([1, 1, 1, 0.1]),
+    diag([1, 1, 1, 10]),
+    diag([1, 1, 1, 100])
+};
+
+isR = false;
+if (isR == true)
+    l = length(R_values)
+else
+    l = length(Q_values)
+end
+    
+modelname = 'helicopter'
+for i = 1:l
+    if (isR == true)
+        Q = diag([1, 1, 1, 1]);
+        R = R_values(i);
+    else
+        Q = Q_values{i, 1};
+        R = 1;
+    end
+    [K, S, e] = dlqr(A1, B1, Q, R);
+    if (isR == true)
+        filename = sprintf('data/data_R%.3f.mat', R);
+    else
+        filename = sprintf('data/Q_test_%d', i);
+    end
+        
+    set_param(strcat(modelname,'/To File'), 'Filename', filename);
+    
+    %rtwbuild(modelname);
+    set_param(gcs, 'SimulationCommand', 'connect');
+    set_param(gcs', 'SimulationCommand', 'start');
+    
+    pause(40);
+    set_param(gcs', 'SimulationCommand', 'stop');
+    set_param(gcs, 'SimulationCommand', 'disconnect');
+    
+    input('Press ENTER when you are ready for new test: ')
+end
