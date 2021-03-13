@@ -13,9 +13,9 @@ import matplotlib
 #    'pgf.rcfonts': False,
 #})
 
-import hephaestus
+import optlab
 
-@hephaestus.debug
+@optlab.debug
 def open_mat(
         file_name: str,
         names: list = ['Travel', 'Travelrate', 'Pitch', 'Pitchrate', 'Elevation', 'Elevationrate'],

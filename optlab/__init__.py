@@ -1,4 +1,5 @@
 import functools
+import importlib
 
 def debug(func):
     """Print the function signature and return value"""
@@ -14,4 +15,5 @@ def debug(func):
     return wrapper_debug
 
 
-import hephaestus.open_matfiles
+import optlab.open_matfiles as open_matfiles
+from optlab.open_matfiles import open_mat

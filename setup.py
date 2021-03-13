@@ -4,7 +4,7 @@ with open('requirements.txt') as f:
     required = f.read().splitlines()
 
 setup(
-    name='hephaestus',
+    name='optlab',
     version='0.0',
     description='OptReg laboratory scripts',
     url='https://github.com/VemundRogne/OptReg',
