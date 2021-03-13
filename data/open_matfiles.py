@@ -18,7 +18,8 @@ import debug
 @debug.debug
 def open_mat(
         file_name: str,
-        names: list = None,
+        names: list = ['Travel', 'Travelrate', 'Pitch', 'Pitchrate', 'Elevation', 'Elevationrate'],
+        names_ext: list = []
     ) -> pd.DataFrame:
     """ Opens a .mat file into a DataFrame 
 
@@ -29,11 +30,11 @@ def open_mat(
     Returns:
         df: DataFrame
     """
+    names.extend(names_ext)
     mat = scipy.io.loadmat(file_name=file_name)
     mat = mat['ans']
     mat = np.transpose(mat)
     
-    print(mat[:, 0])
     df = pd.DataFrame(data = mat[:, 1:], index = mat[:, 0])
     df.index.name = "time [s]"
 
