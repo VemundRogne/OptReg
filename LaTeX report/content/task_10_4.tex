@@ -2,6 +2,50 @@
 
 \begin{document}
 \section{10.4 - Optimal Control of Pitch/Travel and Elevation with Feedback}
+We have to add the equation for elevation 
+$$ \ddot{e} + K_3K_{ed}\dot{e} + K_3K_{ep}e = K_3K_{ep}e_c $$
+to the system defined in \cref{eq:lab2_cont_ss}
+
+\begin{equation}\label{eq:lab4_cont_ss}
+	\underbrace{\begin{bmatrix}
+		\dot \lambda \\
+		\dot r \\
+		\dot p \\
+		\ddot p \\
+        \dot e \\
+        \ddot e \\
+	\end{bmatrix}}_{\bm{\dot x}} = 
+	\underbrace{
+	\begin{bmatrix}
+		0 & 1 & 0 & 0 & 0 & 0\\
+		0 & 0 & -K_2 & 0 & 0 & 0\\
+		0 & 0 & 0 & 1 & 0 & 0\\
+		0 & 0 & -K_1 K_{pp} &  -K_1 K_{pd} & 0 & 0\\
+        0 & 0 & 0 & 0 & 0 & 1 \\
+        0 & 0 & 0 & 0 & -K_3K_{ep} & -K_3K_{ed} \\
+	\end{bmatrix}
+	}_{\bm A_c}
+	\begin{bmatrix}
+		\lambda \\ r \\ p \\ \dot{p} \\ e \\ \dot{e}
+	\end{bmatrix}
+	+
+	\underbrace{
+		\begin{bmatrix}
+			0 & 0 \\
+            0 & 0\\
+            0 & 0\\
+            K_1 K_{pp} & 0\\
+            0 & 0 \\
+            0 & K_3K_{ep} \\
+		\end{bmatrix}
+	}_{\bm B_c} 
+    \underbrace{
+        \begin{bmatrix}
+            p_c \\
+            e_c \\
+        \end{bmatrix}
+    }_{u}
+\end{equation}
 
 \subsection{The continuous model}
 \textit{Answer 10.4.1.1}
