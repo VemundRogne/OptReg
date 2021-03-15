@@ -44,16 +44,18 @@ x0 = [x1_0 x2_0 x3_0 x4_0 x5_0 x6_0]';            % Initial values
 N  = 40;                               % Time horizon for states
 M  = N;                                 % Time horizon for inputs
 z  = zeros(N*mx+N*mu,1);                % Initialize z for the whole horizon
-z0 = z;                                 % Initial value for optimization
+z0 = z;
+z0(1:6) = x0; % Initial value for optimization
 
 % Bounds
-ul 	    = -30*pi/180;                   % Lower bound on control
+ul 	    = [-30*pi/180; -inf];                   % Lower bound on control
 uu 	    = -ul;                          % Upper bound on control
 
 xl      = -Inf*ones(mx,1);              % Lower bound on states (no bound)
 xu      = Inf*ones(mx,1);               % Upper bound on states (no bound)
-xl(3)   = ul;                           % Lower bound on state x3
-xu(3)   = uu;                           % Upper bound on state x3
+xl(3)   = ul(1);                           % Lower bound on state x3
+xu(3)   = uu(1);                           % Upper bound on state x3
+
 % Generate constraints on measurements and inputs
 [vlb,vub]       = gen_constraints(N,M,xl,xu,ul,uu); % hint: gen_constraints
 vlb(N*mx+M*mu)  = 0;                    % We want the last input to be zero
@@ -67,10 +69,19 @@ beq(1:size(A0x0,1), :) = A0x0;
 %% Cost function
 q_1 = 1;
 q_2 = 10;
-cost_func = @(x) sum((x(1:mx:mx*N) - lambda_f).^2) + sum(q_1*x(N*mx+1:mu:N*mu+N*mx).^2) + sum(q_2*x(N*mx+2:mu:N*mu+N*mx).^2);
+Q1 = zeros(mx,mx);
+Q1(1,1) = 1;                            % Weight on state x1
+P1 = eye(2);
+P2 = 1; % Weight on input
+Q = gen_q(Q1,P1,N,M);                  % Generate Q, hint: gen_q
+
+% cost_func = @(x) sum((x(1:mx:mx*N) - lambda_f).^2) + ...
+%     sum(q_1*x(N*mx+1:mu:N*mu+N*mx).^2) + ...
+%     sum(q_2*x(N*mx+2:mu:N*mu+N*mx).^2);
+cost_func = @(z) 0.5*z'*Q*z;
 nonlcon = @nonlincon;
 
-[z, fval] = fmincon(cost_func, z0, [], [], Aeq, beq, [], [], nonlcon);
+[z, fval] = fmincon(cost_func, z0, [], [], Aeq, beq, vlb, vub, nonlcon);
 
 %% Extract control inputs and states
 u1  = [z(N*mx+1:2:N*mx+M*mu)]; % Control input from solution
@@ -101,5 +112,9 @@ timesteps = 0:delta_t:delta_t*(length(x1)-1);
 %u_opt = timeseries(u, timesteps);
 %x_opt = timeseries(x, timesteps);
 
+figure();
 plot(timesteps, x)
-legend('Travel', 'travelrate', 'pich', 'pitchrate', 'elevation', 'elevationrate')
+legend('Travel', 'travelrate', 'pich', 'pitchrate', 'elevation', 'elevationrate');
+
+figure();
+plot(u1);
