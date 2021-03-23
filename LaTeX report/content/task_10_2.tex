@@ -93,15 +93,29 @@ The eigenvalues of the continous model, with $K_{pp} = 0,1 , K_{pd} = 0,4$ are:
 A discretized model is required for generating an optimal trajectory. \textit{[...] continous time models require quite different solution methods} \cite{FossHeirung}
 
 We will discretize the model using the forward Euler method, which is given by:
+\todo[inline]{Do we need to derive forward euler?}
 \begin{equation}\label{eq:lab2_forward_euler}
 	\bm{x}[k + 1] = \bm I \bm x[k] + T\bm{A_c x}[k] + T\bm B_c ,
 \end{equation}
-where $ T $ is the timestep \todo[inline]{timestep in the discretization??}\todo
-[inline]{Add reference to linsys slides}.
+where $ T $ is the timestep in the discrete model.\todo
+[inline]{Add reference to linsys slides}
 Reformulating this, we can write:
 \begin{equation}\label{eq:lab2_discrete_system}
 	\bm{x}_{k + 1} = \underbrace{(\bm I + T \bm A_c)}_{\bm A_d} \bm{x}_{k} + \underbrace{T \bm B_c}_{\bm B_d} u_k
 \end{equation}
+On matrix form $ \bm A_d $ and $ \bm B_d $ becomes: 
+\begin{equation}
+	\bm A_d = \begin{bmatrix}
+		1 & T & 0 & 0 \\
+		0 & 1 & -T K_2 & 0 \\
+		0 & 0 & 1 & T \\
+		0 & 0 & -T K_1 K_{pp} &  1 - T K_1 K_{pd}
+	\end{bmatrix}, \quad 
+	\bm B_d = \begin{bmatrix}
+		0 \\ 0 \\ 0 \\T K_1 K_{pp}
+	\end{bmatrix}
+\end{equation}
+
 
 
 
