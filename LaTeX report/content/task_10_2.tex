@@ -116,20 +116,52 @@ Using MATLAB we found the eigenvalues of $ \bm A $ to be ... \todo[inline]{Add M
 
 \subsection{The open loop optimization problem}
 \textit{How is it formulated?}
+% https://ntnu.blackboard.com/ultra/courses/_24653_1/cl/outline
 
-The optimization problem is to calculate an optimal trajectory for moving the helicopter from $\lambda_0 = \pi$ to $\lambda_f = 0$ by manipulating the input, $p_k$, of the pitch controller.
+The open loop optimization problem finds an optimal trajectory of the helicopter with the cost function
+\begin{equation}
+	\phi = \sum_{i=0}^{N-1} \left( \lambda_{i+1} - \lambda_f \right)^2 + qp_{ci}^2 , \quad q \ge 0
+\end{equation}
+where $q$ is the weight of input-usage. Subject to constraints.
 
-We also have a constraint on the input to the pitch controller:
+\subsubsection{Formulating the cost function}
+\textit{How to you formulate a difference? Im trying to understand that before I write this section}
+
+\subsubsection{The constraints of the optimization problem}
+There are two separate types of constrains in this problem, the system itself and imposed constraints. The system constrains is the physics of the helicopter, while the imposed constraints are for instance a constraint on the pith-reference:
 \begin{equation}
 	\left\lvert p_k \right\rvert \le \frac{30}{180} \pi, k \in \left\{ 1, ..., N \right\} 
 \end{equation}
-this constraint says that the pitch-reference, $p_k$ can not exceed 30 degrees in either direction.
 
-Our objective function (the cost function we wish to minimize) is given as:
+The physics of the helicopter is added in $A_{eq}$ and $b_{eq}$.
 \begin{equation}
-	\phi = \sum_{i=0}^{N-1} \left( \lambda_{i+1} - \lambda_f \right)^2 + qp_{ci}^2 , q \ge 0
+	A_{eq} = 
+	\begin{bmatrix}
+		I & 0 & \cdots & \cdots & 0 & -B & 0 & \cdots & \cdots & 0 \\
+		-A & I & \ddots & & \vdots & 0 & \ddots & \ddots & & \vdots \\
+		\vdots && \ddots & \ddots & 0 & \vdots & & \ddots & \ddots & 0 \\
+		0 & \cdots & 0 & -A & I & 0 & \cdots & \cdots & 0 & -B
+	\end{bmatrix}, \; 
+	b_{eq} =
+	\begin{bmatrix}
+		Ax_0 \\ 0 \\ \vdots \\ 0
+	\end{bmatrix}
 \end{equation}
-where $q$ is the weight of input-usage.
+
+Performing the multiplication (and abusing notation) shows that:
+\begin{equation}
+	A_{eq}z = b_{eq} \implies
+	\begin{bmatrix}
+		x_1-Bu_0 = Ax_0 \\
+		-Ax_1 + x_2 - Bu_1 = 0 \\
+		\vdots
+	\end{bmatrix} \implies
+	\begin{bmatrix}
+		x_1 = Ax_0 + Bu_0 \\
+		x_2 = Ax_1 + Bu_1 \\
+		\vdots
+	\end{bmatrix}
+\end{equation}
 
 \todo[inline] {Add the steps in our formulation. How we get to the quadprog-formulation:} 
 \begin{itemize}
@@ -153,6 +185,8 @@ Weighing the input higher by increasing the value of $q$ means that we are placi
 \subsection{The objective function}
 \textit{Furthermore, discuss the objective function (15) (in the lab assignment text) in particular the term $(\lambda_i-\lambda_f )^2$. For instance, could any unwanted effects arise from steering the helicopter to $\lambda =\lambda_f$ with this objective function?}
 
+From the forum: Here are some questions that will help you figure out what is asked for:
+What will happen when you have some elements that are very large compared to others in a quadratic objective function? Which consequence(s) does this have for the setup in the lab? What is the impact of the length of the control horizon (imagine that the step length, h, is fixed)?
 
 \subsection{Experimental results}
 \textit{Printouts of data from relevant experiments (plots).
