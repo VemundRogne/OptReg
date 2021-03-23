@@ -1,0 +1,16 @@
+Test1: Q = diag([1, 1, 1, 1, 1, 1]); R = diag([1, 1]);
+Test2: Q = diag([5, 1, 1, 1, 1, 1]); R = diag([1, 1]):
+Test3: Q = diag([10, 1, 1, 1, 1, 1]); R = diag([1, 1]);
+Test4: Q = diag([15, 1, 1, 1, 1, 1]); R = diag([1, 1]);
+Test5: Q = diag([15, 1, 1, 1, 5, 1]); R = diag([1, 1]);
+Test6: Q = diag([15, 1, 1, 1, 10, 1]); R = diag([1, 1]);
+Test7: Q = diag([15, 1, 1, 1, 15, 1]); R = diag([1, 1]);
+Test8: Q = diag([15, 1, 1, 1, 20, 1]); R = diag([1, 1]);
+Test9: Q = diag([15, 1, 1, 1, 50, 1]); R = diag([1, 1]);
+Test10: Q_lqr = diag([50, 1, 1, 1, 1, 1]); R = diag([1, 1]);
+Test11: Q_lqr = diag([1000, 1, 1, 1, 1, 1]); R = diag([1, 1]);
+Test12: Q_lqr = diag([1, 1, 20, 1, 1, 1]); R = diag([1, 1]);
+Test13: Q_lqr = diag([50, 1, 1, 1, 50, 1]); R = diag([1, 1]);
+Test14: Q_lqr = diag([15, 1, 1, 1, 15, 1]); R = diag([1, 1]);
+Test15: Q_lqr = diag([15, 1, 0.1, 1, 15, 1]); R = diag([1, 1]);
+Test16: Q_lqr = diag([15, 1, 10, 1, 15, 1]); R = diag([1, 1]);
