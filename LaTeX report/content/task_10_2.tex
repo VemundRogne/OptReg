@@ -15,15 +15,15 @@ The state-vector, $\bm x$ is defined as:
 	\end{bmatrix}
 	^T ,
 \end{equation}
-where $\lambda$ is travel, $r$ is speed of travel (travelrate), $p$ is pitch and $\dot{p}$ is pitchrate.
+where $\lambda$ is travel, $r$ is the travel rate, $p$ is pitch and $\dot{p}$ is pitch rate.
 
-The dynamic equations for the system was given in the problem description. The following equations were given:
-\begin{subequations}
+The dynamic equations for the system was given in the problem description \todo{Add ref to page and paper}. These following equations were given:
+\begin{subequations} \label{eq:lab2_states_eq}
 	\begin{align}
 		\dot \lambda &= r \\
 		\dot r &= -K_2 p, \quad K_2 = \frac{K_p l_a}{J_t}\\
 		\dot p &= \dot p \\
-		\ddot p &= -K_1 K_{pd} \dot p - K_1 K_{pp} p + K_1 K_{pp} pc, \quad K_1 = \frac{K_f l_h}{J_p}
+		\ddot p &= -K_1 V_d = K_1 K_{pd} \dot p - K_1 K_{pp} p + K_1 K_{pp} pc, \quad K_1 = \frac{K_f l_h}{J_p}
 	\end{align}
 \end{subequations}
 The state-space form of the system therefore becomes: 
@@ -52,6 +52,26 @@ The state-space form of the system therefore becomes:
 		\end{bmatrix}
 	}_{\bm B_c} \underbrace{p_c}_{u}
 \end{equation}
+
+\subsubsection{A deeper dive into the state-space model}
+The state-space form of the system models two part of the whole system, namely: 
+\begin{enumerate}
+	\item The physics of the helicopter.
+	\item The proportional-derivative controller for the pitch.
+\end{enumerate}
+This is shown in \cref{fig:lab2_system} where the red dotted box shows what we model with the state space model. \todo[inline]{Add ref to the figure in the problem description}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.8\linewidth]{figures/lab2_system}
+	\caption{The red box encapsulate what is modelled in the state space model described by \cref{eq:lab2_cont_ss}.}
+	\label{fig:lab2_system}
+\end{figure}
+
+This becomes clear studying the equations in \cref{eq:lab2_states_eq}. They describe the helicopters physics for all states except elevation and elevation rate. $ \lambda $ and $ r $ is dependent on the helicopters pitch, $ p $. $ p $ and $ \dot p  $ is however dependent on the voltage difference, $ V_d $. The voltage difference is the output of the PD-controller for controlling the pitch\todo{Should we add acronym list?}. 
+
+To summarize, this means that our state space model describes the helicopter's physics through the dynamic equations for $ \lambda $, $ r $, $ p $ and $ \dot p $, while the equation of $ V_d $ describes the PD-controller used to control the pitch angle. In total our state-space model is modelling both the helicopter and the PD controller for pitch.
+
 
 \subsubsection{Stability and eigenvalues}
 The properties of this system is dependent on physical constants ($l_a, J_t, ...$) and control parameters ($K_{pp}, K_{pd}$).
