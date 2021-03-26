@@ -21,13 +21,15 @@ The next challenge is to find a good feedback gain matrix $ \bm K $, that gives 
 \subsection{LQ controller}
 \textit{Briefly explain LQ controller. Especially, but not limited to, what is the role of the matrices Q and R? Justify your choice of weights.}
 
-An LQ (or linear-quadratic) controller, solves the quadratic objective function given by: 
+As explained in the problem description\todo{cref}, an LQ (or linear-quadratic) controller, solves the quadratic objective function given by
 \begin{equation}
     J = \sum^\infty_{i=0} \Delta x_{i+1}^\top Q \Delta x_{i+1} + \Delta u_i^\top R \Delta u_i, \quad Q \ge0, \quad R > 0
 \end{equation}
-
-
-is an optimal feedback controller that can be applied to a linear model $\Delta x=A\Delta x_i + B \Delta u_i$ with a quadratic cost function:
+for a linear model
+\begin{equation}\label{eq:lab3_lin_model}
+	\Delta x=A\Delta x_i + B \Delta u_i
+\end{equation}
+without including inequality constraints.
 Here $ \Delta x = x - x^*$ and $\Delta u = u - u^*$ are deviations from the optimal trajectory.
 
 The matrix $Q$ and the scalar $R$ are weights in the optimalization problem. The value of $Q$ determines how much deviation in the state value should be penalized, while the value of $R$ determines how much input-usage should be punished. This allows the designer to optimize the regulator to the specific implementation: A system where the input is cheap (like the helicopter used in this assignment) would have a relatively small value of $R$ compared to $Q$.
