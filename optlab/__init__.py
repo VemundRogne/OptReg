@@ -13,6 +13,8 @@ units = {
 LQRnames = ["u_opt", "u_k"]
 LQRnames.extend([statename+"_opt" for statename in statenames])
 
+plot_basepath = "Latex report/figures/"
+
 def debug(func):
     """Print the function signature and return value"""
     @functools.wraps(func)

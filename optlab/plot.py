@@ -1,8 +1,20 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib
 
 import optlab
+
+def export_plot(
+        plotname,
+        basepath: str = optlab.plot_basepath
+    ):
+    plt.tight_layout()
+
+    if plotname[-4:] != ".pgf":
+        plotname = plotname + ".pgf"
+
+    plt.savefig(basepath+plotname)
 
 @optlab.debug
 def plot_comparisons(
