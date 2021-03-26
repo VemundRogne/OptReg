@@ -1,6 +1,12 @@
 import functools
 import importlib
 
+statenames = ['Travel', 'Travelrate', 'Pitch', 'Pitchrate', 'Elevation', 'Elevationrate']
+statelabels = statenames
+
+LQRnames = ["u_opt", "u_k"]
+LQRnames.extend([statename+"_opt" for statename in statenames])
+
 def debug(func):
     """Print the function signature and return value"""
     @functools.wraps(func)

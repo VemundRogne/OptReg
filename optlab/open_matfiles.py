@@ -15,11 +15,10 @@ import matplotlib
 
 import optlab
 
-@optlab.debug
+
 def open_mat(
         file_name: str,
-        names: list = ['Travel', 'Travelrate', 'Pitch', 'Pitchrate', 'Elevation', 'Elevationrate'],
-        names_ext: list = []
+        LABn: int,
     ) -> pd.DataFrame:
     """ Opens a .mat file into a DataFrame 
 
@@ -30,7 +29,12 @@ def open_mat(
     Returns:
         df: DataFrame
     """
-    names.extend(names_ext)
+    if LABn == 2:
+        names = optlab.statenames
+    
+    if LABn == 3 or LABn == 4:
+        names = optlab.statenames + optlab.LQRnames
+
     mat = scipy.io.loadmat(file_name=file_name)
     mat = mat['ans']
     mat = np.transpose(mat)
@@ -46,7 +50,7 @@ def open_mat(
 
 
 if __name__ == '__main__':
-    df = open_mat(file_name="data/Q_test_12.mat", names_ext=["u_opt", "u_used", 'opt_travel', 'opt_travelrate', 'opt_pitch', 'opt_pitchrate'])
+    df = open_mat(file_name="data/Q_test_12.mat", LABn=3)
     df.plot(y=["opt_travel", "Travel"])
     #plt.savefig('test_figure.pgf')
     plt.show()
