@@ -202,10 +202,23 @@ Weighing the input higher by increasing the value of $q$ means that we are placi
 From the forum: Here are some questions that will help you figure out what is asked for:
 What will happen when you have some elements that are very large compared to others in a quadratic objective function? Which consequence(s) does this have for the setup in the lab? What is the impact of the length of the control horizon (imagine that the step length, h, is fixed)?
 
+\clearpage
 \subsection{Experimental results}
 \textit{Printouts of data from relevant experiments (plots).
 Discussion and analysis of the results.
 Answer 10.2.2.7 here.}
+
+\begin{figure}[h]
+    \begin{center}
+        \input{figures/LAB2_plot_1.pgf}
+    \end{center}
+	\caption{Results of LAB2}
+	\label{fig:LAB2_plot_1}
+\end{figure}
+
+As \cref{fig:LAB2_plot_1} clearly shows the control sequence did not yield the desired travel-response. This is expected, as there is no feedback - any small variations will move the response from the planned one. In this case the variations are quite large, particularly the offset from what the encoder measures as $0$ pitch as opposed to what the real-world $0$ pitch is. This difference makes the helicopter travel while it keeps $0$-pitch.
+
+The response shows a major travel-offset from the generated sequence, this is primarily because of the offset described above. The pitch-response is however quite close to the optimal trajectory - this is expected as there is not the same level of offset as in travel.
 
 \subsection{MATLAB and Simulink}
 \textit{Code and diagrams go here}
