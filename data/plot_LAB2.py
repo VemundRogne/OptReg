@@ -1,0 +1,17 @@
+import optlab
+
+import matplotlib.pyplot as plt
+
+def plot_1():
+    df = optlab.open_mat("LAB2/lab2_without_pitch_offset.mat", LABn=2)
+    fig, ax = optlab.plot.plot_flight(
+        df,
+        columns = ['Travel', 'Pitch'],
+        xlim=(0, 30),
+        ylims=[[0, 5], None]
+    )
+    fig.suptitle("Optimal control of pitch/travel without feedback")
+
+if __name__ == '__main__':
+    plot_1()
+    plt.show()

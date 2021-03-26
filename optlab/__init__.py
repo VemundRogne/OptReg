@@ -4,6 +4,12 @@ import importlib
 statenames = ['Travel', 'Travelrate', 'Pitch', 'Pitchrate', 'Elevation', 'Elevationrate']
 statelabels = statenames
 
+units = {
+    "Travel": 'Rad', "Travelrate": "Rad/s",
+    "Pitch": "Rad", "Pitchrate": "Rad/s",
+    "Elevation": "Rad", "Elevationrate": "Rad/s"
+}
+
 LQRnames = ["u_opt", "u_k"]
 LQRnames.extend([statename+"_opt" for statename in statenames])
 
@@ -23,3 +29,4 @@ def debug(func):
 
 import optlab.open_matfiles as open_matfiles
 from optlab.open_matfiles import open_mat
+import optlab.plot as plot
