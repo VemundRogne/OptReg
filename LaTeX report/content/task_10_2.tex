@@ -97,7 +97,7 @@ We will discretize the model using the forward Euler method, which is given by:
 \begin{equation}\label{eq:lab2_forward_euler}
 	\bm{x}[k + 1] = \bm I \bm x[k] + T\bm{A_c x}[k] + T\bm B_c ,
 \end{equation}
-where $ T $ is the timestep in the discrete model.\todo
+where $ T $ is the sample-time in the discrete model.\todo
 [inline]{Add reference to linsys slides}
 Reformulating this, we can write:
 \begin{equation}\label{eq:lab2_discrete_system}
@@ -120,12 +120,12 @@ On matrix form $ \bm A_d $ and $ \bm B_d $ becomes:
 
 
 \subsubsection{Checking stability}
-The stability condition for \cref{eq:lab2_discrete_system} is:
+The stability condition for \cref{eq:lab2_discrete_system} is that all eigenvalues of $ \bm A_d $ is less than one in absolute values, i.e.:
 \begin{equation}\label{eq:lab2_stab_condition}
-	|1 + T \lambda| \leq 1
-\end{equation}, where $ \lambda $ is an eigenvalue of $ \bm A_c $ in \cref{eq:lab2_discrete_system}. 
-\todo[inline]{Where is this equation from? I believe that it works, but we should either derive it or reference where we found it. ANSWER: From linsys slides, see above}
-Using MATLAB we found the eigenvalues of $ \bm A $ to be ... \todo[inline]{Add Matlab appendix}
+	|\lambda_i| \leq 1, \quad \text{for } i = 1, 2, 3, 4
+\end{equation}, where $ \lambda_i $ is the i'th eigenvalue of $ \bm A_d $.
+\todo[inline]{Where is this equation from? I believe that it works, but we should either derive it or reference where we found it. ANSWER: From linsys slides, see above.} 
+Using the constant values given in the MATLAB we found the eigenvalues of $ \bm A $ to be ... \todo[inline]{Add Matlab appendix}
 \todo[inline]{find eigenvalues}
 
 \subsection{The open loop optimization problem}
@@ -209,5 +209,7 @@ Answer 10.2.2.7 here.}
 
 \subsection{MATLAB and Simulink}
 \textit{Code and diagrams go here}
-	
+\subsubsection{MATLAB}
+\lstinputlisting[caption= {MATALB code for lab 2}]{code/lab2.m}
+\subsubsection{Simulink}
 \end{document}
