@@ -7,7 +7,8 @@ statelabels = statenames
 units = {
     "Travel": 'Rad', "Travelrate": "Rad/s",
     "Pitch": "Rad", "Pitchrate": "Rad/s",
-    "Elevation": "Rad", "Elevationrate": "Rad/s"
+    "Elevation": "Rad", "Elevationrate": "Rad/s",
+    "u": "Pitch setpoint [Rad]"
 }
 
 LQRnames = ["u_opt", "u"]
