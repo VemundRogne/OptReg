@@ -61,8 +61,6 @@ def plot_flight(
     # Plot the columns
     for i, col in enumerate(columns):
         ax[i].plot(data[col], label=prelabel + col)
-        
-        ax[i].set_xlabel("Time [s]")
 
         # Add ylabel if it exist in the units
         if col in optlab.units:
@@ -92,5 +90,7 @@ def plot_flight(
 
     for axis in ax:
         axis.legend()
+    
+    ax[-1].set_xlabel("Time [s]")
     
     return fig, ax
