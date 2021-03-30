@@ -10,7 +10,7 @@ units = {
     "Elevation": "Rad", "Elevationrate": "Rad/s"
 }
 
-LQRnames = ["u_opt", "u_k"]
+LQRnames = ["u_opt", "u"]
 LQRnames.extend([statename+"_opt" for statename in statenames])
 
 plot_basepath = "Latex report/figures/"
