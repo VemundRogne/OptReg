@@ -36,7 +36,7 @@ def plot_comparisons(
             data,
             columns = columns_to_compare,
             compares = [],
-            prelabel=labels[i] + " ",
+            flightlabel=labels[i] + " ",
             fig=fig,
             ax=ax
         )
@@ -52,7 +52,8 @@ def plot_flight(
         xlim = None,
         fig = None,
         ax = None,
-        prelabel = "",
+        flightlabel = "",
+        label_on = False,
     ):
     if fig == None and ax == None:
         # Create the figure and axes
@@ -60,7 +61,7 @@ def plot_flight(
 
     # Plot the columns
     for i, col in enumerate(columns):
-        ax[i].plot(data[col], label=prelabel + col)
+        ax[i].plot(data[col], label=flightlabel)
 
         # Add ylabel if it exist in the units
         if col in optlab.units:
@@ -77,7 +78,7 @@ def plot_flight(
         try:
             if compares[i]:
                 try:
-                    ax[i].plot(data[compares[i]], label=prelabel + compares[i])
+                    ax[i].plot(data[compares[i]], label=fligthlabel)
                 except KeyError:
                     print("COMPARISON KEY ({}) for ({}) NOT PRESENT IN DATA!!!".format(
                         compares[i], col
@@ -90,6 +91,9 @@ def plot_flight(
 
     for axis in ax:
         axis.legend()
+    
+    for i, axis in enumerate(ax):
+        axis.set_title(columns[i])
     
     ax[-1].set_xlabel("Time [s]")
     
