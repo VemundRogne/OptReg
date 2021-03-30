@@ -15,6 +15,17 @@ LQRnames.extend([statename+"_opt" for statename in statenames])
 
 plot_basepath = "Latex report/figures/"
 
+def enable_pgf_plots():
+    import matplotlib
+    matplotlib.use("pgf")
+    matplotlib.rcParams.update({
+        "pgf.texsystem": "pdflatex",
+        'font.family': 'serif',
+        'text.usetex': True,
+        'pgf.rcfonts': False,
+    })
+    matplotlib.rcParams['axes.unicode_minus'] = False
+
 def debug(func):
     """Print the function signature and return value"""
     @functools.wraps(func)
