@@ -14,7 +14,7 @@ units = {
 LQRnames = ["u_opt", "u"]
 LQRnames.extend([statename+"_opt" for statename in statenames])
 
-plot_basepath = "Latex report/figures/"
+plot_basepath = "../Latex report/figures/"
 
 def enable_pgf_plots():
     import matplotlib
