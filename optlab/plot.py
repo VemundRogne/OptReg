@@ -29,30 +29,39 @@ def plot_comparisons(
         labels: labels of each pandas object in the datalist
         columns_to_compare: list of the columns that you want to plot against eachother
     """
+    fig = None
+    ax = None
+    for i, data in enumerate(data_to_compare):
+        fig, ax = plot_flight(
+            data,
+            columns = columns_to_compare,
+            compares = [],
+            prelabel=labels[i] + " ",
+            fig=fig,
+            ax=ax
+        )
+    return fig, ax
 
-    fig, ax = plt.subplots(len(columns_to_compare), 1)
-    for data_i, data in enumerate(data_to_compare):
-        for col_n, column in enumerate(columns_to_compare):
-            ax[col_n].plot(
-                data[column], label=labels[data_i]
-            )
-    
-    ax[0].legend()
 
-
+@optlab.debug
 def plot_flight(
         data: pd.DataFrame,
         columns = ['Travel'],
         compares = ['OptTravel', 'OptPitch'],
         ylims: list = [],
         xlim = None,
+        fig = None,
+        ax = None,
+        prelabel = "",
     ):
-    # Create the figure and axes
-    fig, ax = plt.subplots(nrows=len(columns), sharex=True)
+    if fig == None and ax == None:
+        # Create the figure and axes
+        fig, ax = plt.subplots(nrows=len(columns), sharex=True)
 
     # Plot the columns
     for i, col in enumerate(columns):
-        ax[i].plot(data[col], label=col)
+        ax[i].plot(data[col], label=prelabel + col)
+        
         ax[i].set_xlabel("Time [s]")
 
         # Add ylabel if it exist in the units
@@ -70,7 +79,7 @@ def plot_flight(
         try:
             if compares[i]:
                 try:
-                    ax[i].plot(data[compares[i]], label=compares[i])
+                    ax[i].plot(data[compares[i]], label=prelabel + compares[i])
                 except KeyError:
                     print("COMPARISON KEY ({}) for ({}) NOT PRESENT IN DATA!!!".format(
                         compares[i], col
