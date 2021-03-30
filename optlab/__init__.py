@@ -7,13 +7,25 @@ statelabels = statenames
 units = {
     "Travel": 'Rad', "Travelrate": "Rad/s",
     "Pitch": "Rad", "Pitchrate": "Rad/s",
-    "Elevation": "Rad", "Elevationrate": "Rad/s"
+    "Elevation": "Rad", "Elevationrate": "Rad/s",
+    "u": "Pitch setpoint [Rad]"
 }
 
-LQRnames = ["u_opt", "u_k"]
+LQRnames = ["u_opt", "u"]
 LQRnames.extend([statename+"_opt" for statename in statenames])
 
-plot_basepath = "Latex report/figures/"
+plot_basepath = "../Latex report/figures/"
+
+def enable_pgf_plots():
+    import matplotlib
+    matplotlib.use("pgf")
+    matplotlib.rcParams.update({
+        "pgf.texsystem": "pdflatex",
+        'font.family': 'serif',
+        'text.usetex': True,
+        'pgf.rcfonts': False,
+    })
+    matplotlib.rcParams['axes.unicode_minus'] = False
 
 def debug(func):
     """Print the function signature and return value"""
