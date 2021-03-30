@@ -20,7 +20,8 @@ def export_plot(
 def plot_comparisons(
     data_to_compare: list,
     labels: list,
-    columns_to_compare: list
+    columns_to_compare: list,
+    plot_optimal_trajectory = False
 ):
     """ Plots a comparison between different runs 
     
@@ -31,6 +32,16 @@ def plot_comparisons(
     """
     fig = None
     ax = None
+
+    # Plot the reference trajectory
+    if plot_optimal_trajectory == True:
+        fig, ax = plot_flight(
+            data_to_compare[0],
+            columns = [col + "_opt" for col in columns_to_compare],
+            compares = [],
+            flightlabel="optimal trajectory",
+        )
+
     for i, data in enumerate(data_to_compare):
         fig, ax = plot_flight(
             data,

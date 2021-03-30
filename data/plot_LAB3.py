@@ -17,7 +17,8 @@ R_tests_labels = ["R=0.01", "R=0.10", "R=1.0", "R=10"]
 optlab.plot.plot_comparisons(
     R_tests,
     R_tests_labels,
-    ['Travel', 'Travelrate', 'Pitch', 'Pitchrate']
+    ['Travel', 'Travelrate', 'Pitch', 'Pitchrate'],
+    plot_optimal_trajectory=True
 )
 
 plt.show()
