@@ -40,6 +40,7 @@ def plot_comparisons(
             columns = [col + "_opt" for col in columns_to_compare],
             compares = [],
             flightlabel="optimal trajectory",
+            linecolor='black'
         )
 
     for i, data in enumerate(data_to_compare):
@@ -65,6 +66,7 @@ def plot_flight(
         ax = None,
         flightlabel = "",
         label_on = False,
+        linecolor = None
     ):
     if fig == None and ax == None:
         # Create the figure and axes
@@ -72,7 +74,7 @@ def plot_flight(
 
     # Plot the columns
     for i, col in enumerate(columns):
-        ax[i].plot(data[col], label=flightlabel)
+        ax[i].plot(data[col], label=flightlabel, color=linecolor)
 
         # Add ylabel if it exist in the units
         if col in optlab.units:
