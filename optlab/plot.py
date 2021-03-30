@@ -22,7 +22,8 @@ def plot_comparisons(
     labels: list,
     columns_to_compare: list,
     plot_optimal_trajectory = False,
-    xlim = None
+    xlim = None,
+    legend_loc = None
 ):
     """ Plots a comparison between different runs 
     
@@ -42,7 +43,8 @@ def plot_comparisons(
             compares = [],
             flightlabel="optimal trajectory",
             linecolor='black',
-            xlim = xlim
+            xlim = xlim,
+            legend_loc = legend_loc
         )
 
     for i, data in enumerate(data_to_compare):
@@ -53,7 +55,8 @@ def plot_comparisons(
             flightlabel=labels[i] + " ",
             fig=fig,
             ax=ax,
-            xlim=xlim
+            xlim=xlim,
+            legend_loc = legend_loc
         )
     return fig, ax
 
@@ -69,7 +72,8 @@ def plot_flight(
         ax = None,
         flightlabel = "",
         label_on = False,
-        linecolor = None
+        linecolor = None,
+        legend_loc = None
     ):
     if fig == None and ax == None:
         # Create the figure and axes
@@ -106,7 +110,7 @@ def plot_flight(
         plt.xlim(xlim)
 
     for axis in ax:
-        axis.legend()
+        axis.legend(loc=legend_loc)
     
     for i, axis in enumerate(ax):
         axis.set_title(columns[i])
