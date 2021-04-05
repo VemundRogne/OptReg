@@ -2,25 +2,20 @@
 \begin{document}
 	
 \section{Optimal Control of Pitch/Travel with Feedback (LQ)}
-In this task we add feedback to the optimal controller that we developed in \cref{kap:Part2OptimalControlWithoutFeedback}
+In this task we add feedback to the optimal controller that we developed in \cref{kap:Part2OptimalControlWithoutFeedback}. Feedback is clearly needed as the experimental results in \cref{kap:task_10_2_experimental_results} show that the helicopter response quickly deviates from the optimal trajectory. The results of this laboratory exercise shows that adding feedback greatly improves the perfomance of the helicopter.
 
 \subsection{Introducing feedback}
-Feedback is introduced to \cref{eq:lab2_discrete_system} by using the following term for the input:
+There are many ways of adding feedback to a system. In this case the assignment states that we are to add feedback between the calculated optimal trajectory and the actual trajectory. In other words the feedback introduced here modifies the input $u$ to get closer to the optimal trajectory $x^*$.
+
+The pitch-control input is now governed by the equation:
 \begin{equation}\label{eq:lab3_feedback}
 	u_k = u_k^* - \bm{K}^T(\bm x_k - \bm x_k^*)
-\end{equation}, 
-where $ u_k^* $ and $ \bm x_k^* $ is, respectively, the optimal input- and state-trajectory calculated with\todo{add cref to the equation doing this}, $ \bm x_k $ is the state and $ \bm K $ is the feedback gain matrix.
-\todo[inline]{Do we need to say something about k: \\ 
-$ x_k $ is the state at timestep k (or something like that)}.
+\end{equation}
+where $u_k^*$ and $\bm x_k^*$ are the optimal input and state trajectories predicted in the optimization layer.
 
-In \cref{eq:lab3_feedback}, the last term $ -\bm{K}^T(\bm x_k - \bm x_k^*) $ is the correction term. If there is a deviation in the actual state $ \bm x_k $ and the optimal state $ \bm x_k^* $, this term will correct\todo{correct is not a good word here} the input $ u_k $ so the next state $ \bm x_{k + 1} $ comes closer to the optimal state. 
-\todo[inline]{Dette er en svært kronglete setning. Formuler denne bedre}
+This feedback equation modifies the input $u_k$ to the pitch-controller if the state $x_k$ deviates from the optimal value $x_k^*$. The feedback gain $K$ is calculated using an LQ controller.
 
-The next challenge is to find a good feedback gain matrix $ \bm K $, that gives us a good behavior for the system. We will use a LQ controller for this task.
-
-\subsection{LQ controller}
-\textit{Briefly explain LQ controller. Especially, but not limited to, what is the role of the matrices Q and R? Justify your choice of weights.}
-
+\subsection{LQ controller}\label{kap:task_10_3_LQ_controller}
 As explained in the problem description\todo{cref}, an LQ (or linear-quadratic) controller, solves the quadratic objective function given by
 \begin{equation}
     J = \sum^\infty_{i=0} \Delta x_{i+1}^\top Q \Delta x_{i+1} + \Delta u_i^\top R \Delta u_i, \quad Q \ge0, \quad R > 0
@@ -32,15 +27,43 @@ for a linear model
 without including inequality constraints.
 Here $ \Delta x = x - x^*$ and $\Delta u = u - u^*$ are deviations from the optimal trajectory.
 
-The matrix $Q$ and the scalar $R$ are weights in the optimalization problem. The value of $Q$ determines how much deviation in the state value should be penalized, while the value of $R$ determines how much input-usage should be punished. This allows the designer to optimize the regulator to the specific implementation: A system where the input is cheap (like the helicopter used in this assignment) would have a relatively small value of $R$ compared to $Q$.
+The matrix $Q$ and the scalar $R$ are the weights of the optimalization problem. $Q$ determines how much state-deviations should be penalized, while $R$ determines how much input-deviation should be punished. This allows the designer to optimize the regulator to the specific implementation: Is it more important to have low input-deviation than state-deviation?
+
+In this system there is only one constraint on the input; that it shall not exceed 30 degrees. Therefore a small R-value compared to Q is warranted. This will produce a regulator that tries harder to minimize state-deviation than input-deviation.
 
 \subsection{Model Predictive Control}
-\textit{Answer 10.3.1.3 here.}
+Model Predictive Control is another way of introducing feedback to an optimal control system. In an MPC controlled system the optimal response and input is recalculated at every timestep, the input used is simply the first of the optimal input values calculated at every step.
+
+This is a drastically different approach to the LQ-method impemented in this laboratory exercise.
+
+\subsubsection{Modified Control Hierarchy with MPC}
+Rather than introducing the Advanced Control Layer with the LQ-controller; introducing MPC would introduce the feedback to the Optimization Layer instead. The optimization layer would use the current state value and generate an optimal trajectory to the target, outputting pitch-setpoints to the Basic control layer at every timestep.
 
 \subsection{Experimental results}
-\textit{Printouts of data from relevant experiments (plots).
-Discussion and analysis of the results.
-Answer 10.3.2.5 here.}
+It is very clear that introducing feedback produced results much better than the ones achieved without feedback, almost regardless of the tuning of the LQR regulator. This is of course what was expected.
+
+The group performed experiments with different values of Q and R to analyze the performance of the helicopter with different tunings.
+
+\Cref{fig:LAB3_R_variations} shows that changing the R-value did not drastically change the response, nevertheless it was observed that a larger R-value produces greater state-offset and smaller input-offset.
+
+\Cref{fig:LAB3_Q_variations} shows that increasing the Q-value greatly reduces the offset from the optimal and actual travel response. It was also observed that this caused oscillations in the input-values.
+
+The experimental results are consistent with the theory of the LQ controller laid out in \cref{kap:task_10_3_LQ_controller}.
+
+The group observed that the state never reached the optimal trajectory, even with very high Q-values. The group believes that adding integration to the LQ-regulator would eliminate the stationary- and reduce the dynamic offset. This was however not explored further.
+
+\begin{figure}[h]
+    \includegraphics[width=\linewidth]{figures/LAB3_R_variations.png}
+	\caption{Results of varying R-values wihle keeping Q=diag([1,1,1,1])}
+	\label{fig:LAB3_R_variations}
+\end{figure}
+
+\begin{figure}[h]
+	\includegraphics[width=\linewidth]{figures/LAB3_Q_variations.png}
+	\caption{Results of varying Q-values while keeping $R=1$}
+	\label{fig:LAB3_Q_variations}
+\end{figure}
+\clearpage
 
 \subsection{MATLAB and Simulink}
 \textit{Code and diagrams go here}
