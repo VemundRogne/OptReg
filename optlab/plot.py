@@ -7,14 +7,21 @@ import optlab
 
 def export_plot(
         plotname,
-        basepath: str = optlab.plot_basepath
+        basepath: str = optlab.plot_basepath,
+        pgf = False
     ):
     plt.tight_layout()
 
-    if plotname[-4:] != ".pgf":
-        plotname = plotname + ".pgf"
+    if pgf:
+        if plotname[-4:] != ".pgf":
+            plotname = plotname + ".pgf"
+        plt.savefig(basepath+plotname)
 
-    plt.savefig(basepath+plotname)
+    else:
+        if plotname[-4] != ".png":
+            plotname = plotname + ".png"
+        
+        plt.savefig(basepath+plotname, dpi=400)
 
 @optlab.debug
 def plot_comparisons(

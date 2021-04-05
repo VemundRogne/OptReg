@@ -80,11 +80,11 @@ def plot_different_Q_values():
 
 
 if __name__ == '__main__':
-    optlab.enable_pgf_plots()
+    #optlab.enable_pgf_plots()
     
-    #fig, ax = plot_different_R_values()
-    #fig.suptitle("Effect of varying R-values in the LQR regulator")
-    #optlab.plot.export_plot("LAB3_R_variations")
+    fig, ax = plot_different_R_values()
+    fig.suptitle("Effect of varying R-values in the LQR regulator")
+    optlab.plot.export_plot("LAB3_R_variations")
     
     fig, ax = plot_different_Q_values()
     fig.suptitle("Effect of varying Q-values in the LQR regulator")
