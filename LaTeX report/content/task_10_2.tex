@@ -141,58 +141,167 @@ All eigenvalues fulfills the requirement of \cref{eq:lab2_stab_condition}, which
 \subsection{The open loop optimization problem}
 \textit{How is it formulated?}
 % https://ntnu.blackboard.com/ultra/courses/_24653_1/cl/outline
-
-The open loop optimization problem finds an optimal trajectory of the helicopter with the cost function
-\begin{equation}
+As the problem description states, the cost function that must be minimized is described by:
+\begin{equation} \label{eq:lab2_start_cost_func}
 	\phi = \sum_{i=0}^{N-1} \left( \lambda_{i+1} - \lambda_f \right)^2 + qp_{ci}^2 , \quad q \ge 0
 \end{equation}
-where $q$ is the weight of input-usage. Subject to constraints.
+%where $q$ is the weight of input-usage. Subject to constraints.
+We can solve this using the MATLAB function quadprog\todo{Add cite to quadprog docs?}, but need to formulate the optimization problem as a QP problem in standard form to do so. This requires the open loop optimization problem to be on the form: 
+\begin{equation}\label{eq:lab2_quadprog_std_form}
+	\min_x \frac{1}{2} \bm x^t \bm H \bm x + \bm f^T \bm x \quad \text{such that} \begin{cases}
+		\bm A \bm x \leq \bm b, \\
+		\bm A_{eq} \bm x = \bm B_{eq}, \\
+		\bm{lb} \leq \bm x \leq \bm{ub}		
+	\end{cases}
+\end{equation}
 
-\subsubsection{Formulating the cost function}
+The next subsections describes this process.
+
+\subsubsection{Formulating the cost function} \label{sec:lab2_cost_func}
 \textit{How to you formulate a difference? Im trying to understand that before I write this section}
 
-\subsubsection{The constraints of the optimization problem}
-There are two separate types of constrains in this problem, the system itself and imposed constraints. The system constrains is the physics of the helicopter, while the imposed constraints are for instance a constraint on the pith-reference:
+\Cref{eq:lab2_start_cost_func} can be rewritten with $ \bm x $ and $ u $:
+\begin{equation}\label{eq:lab2_start_cost_func_2}
+	f(\bm x, u) = \sum_{i=0}^{N-1} \left( \bm x_{i+1} - \bm x_f \right)^T \bm Q \left( \bm x_{i+1} - \bm x_f \right) + q u^2
+\end{equation}, where
+\begin{equation}\label{eq:lab2_lambda_f}
+	\bm x_f = \begin{bmatrix}
+		\lambda_f \\ 0 \\ 0 \\ 0
+	\end{bmatrix}
+\end{equation}
+\begin{equation}\label{eq:lab2_Q}
+	\bm Q = \begin{bmatrix}
+		1 & 0 & 0 & 0 \\
+		0 & 0 & 0 & 0 \\
+		0 & 0 & 0 & 0 \\
+		0 & 0 & 0 & 0
+	\end{bmatrix}
+\end{equation}
+However, in this case, we have that $ \lambda_f = 0 $ and therefore $ \bm x_f = \bm 0 $, and \cref{eq:lab2_start_cost_func_2} can be rewritten as an finite-horizon discrete LQR\todo{Add cite to wikipedia description}:
+
+\begin{equation}\label{eq:lab2_LQR}
+	f(\bm x, u) = \sum_{i=0}^{N-1} \bm x_{i+1}^T \bm Q \bm x_{i+1} + r u^2
+\end{equation}
+, where
+\begin{equation}\label{eq:lab2_R}
+	r = q
+\end{equation}
+
+Combining all variables that should be optimized in one vector, we can get rid of the summation in \cref{eq:lab2_LQR}. This means all states and inputs for the $ N $ timesteps\todo{Er timesteps et feil ord?} in one vector. This is described by:
+\begin{equation}\label{eq:lab2_z}
+	\bm z = \begin{bmatrix}
+		\bm x_1 & \bm x_2 & ... & \bm x_n & u_0 & u_1 &... & u_{n-1} 
+	\end{bmatrix}^T
+\end{equation}
+
+\Cref{eq:lab2_LQR} can then be rewritten as: 
+\begin{equation}\label{eq:lab2_quadprog}
+	f(\bm z) = \bm z^T \bm H \bm z
+\end{equation}, where
+\begin{equation}\label{eq:lab2_H}
+	\bm H = \begin{bmatrix}
+		\bm Q & 0 & \cdots  & 0 & 0 & 0 & \cdots & 0\\
+		0 & \bm Q & \cdots  & 0 & 0 & 0 & \cdots & 0\\
+		 & & \ddots &  &  &  &  & \\
+		0 & 0 & \cdots & \bm Q & 0 & 0  & \cdots & 0\\
+		0 & 0 & \cdots & 0 & r & 0  & \cdots & 0\\
+		0 & 0 & \cdots & 0 & 0 & r  & \cdots & 0\\
+		 & &  &  &  &  & \ddots & \\
+		0 & 0 & \cdots & 0 & 0 & 0  & \cdots & r
+	\end{bmatrix}
+\end{equation}
+\todo[inline]{Maybe fix this H. I'm not sure of the convention here}
+
+
+\subsubsection{The constraints of the optimization problem} \label{sec:lab2_constraints}
+There are two separate types of constrains in this problem, the system itself and imposed constraints. The system constrains is described by the physics of the helicopter, which we have modeled in \cref{eq:lab2_discrete_system}. Imposed constraints are constraints added by the designer of the system. 
+
+In this case we have an imposed constraint on the pitch given by:
 \begin{equation}
 	\left\lvert p_k \right\rvert \le \frac{30}{180} \pi, k \in \left\{ 1, ..., N \right\} 
 \end{equation}
+As the manipulated variable $ p_c $ is the setpoint for the $ p $ controller, this constraint must also be implemented for the setpoint. Since there is no inequality constraints on the other states, they have lower bounds of $ -\infty $ and upper bounds of $ \infty $. This gives us the inequality constraints for the state and the input as: 
+\begin{subequations}
+	\begin{align}
+		\bm x^{low} = \begin{bmatrix}-\infty \\ -\infty \\ -\frac{30}{180} \pi \\ -\infty \end{bmatrix} &\leq \bm x \leq \bm x^{high} = \begin{bmatrix} \infty \\ \infty \\ \frac{30}{180} \pi \\ \infty \end{bmatrix} \\
+		u^{low} = -\frac{30}{180} \pi &\leq u \leq u^{high} = -\frac{30}{180} \pi
+	\end{align}
+\end{subequations}
+We can now easily expand this to define lower- and upper-bounds for the vector $ \bm z $ given in \cref{eq:lab2_z}
+\begin{equation}\label{eq:lab2_z_bounds}
+		\bm z^{low} = \begin{bmatrix}
+			\bm x^{low}\\
+			\vdots \\
+			\bm x^{low}\\
+			u^{low}\\
+			\vdots \\
+			u^{low}
+		\end{bmatrix} \leq \bm z \leq
+		\bm z^{high} = \begin{bmatrix}
+			\bm x^{high}\\
+			\vdots\\
+			\bm x^{high}\\
+			u^{high}\\
+			\vdots \\
+			u^{high}\\
+		\end{bmatrix}
+\end{equation}
 
-The physics of the helicopter is added in $A_{eq}$ and $b_{eq}$.
-\begin{equation}
-	A_{eq} = 
+
+
+The system constraints can be defined as: 
+\begin{equation}\label{eq:lab2_physical_constraints}
+	\bm A_{eq} \bm z = \bm b_{eq}
+\end{equation}
+, where
+%The physics of the helicopter is added in $A_{eq}$ and $b_{eq}$.
+\begin{equation} \label{eq:lab2_Aeq_beq}
+	\bm A_{eq} = 
 	\begin{bmatrix}
-		I & 0 & \cdots & \cdots & 0 & -B & 0 & \cdots & \cdots & 0 \\
-		-A & I & \ddots & & \vdots & 0 & \ddots & \ddots & & \vdots \\
+		\bm I & 0 & \cdots & \cdots & 0 & -\bm B_d & 0 & \cdots & \cdots & 0 \\
+		-\bm A_d & \bm I & \ddots & & \vdots & 0 & \ddots & \ddots & & \vdots \\
 		\vdots && \ddots & \ddots & 0 & \vdots & & \ddots & \ddots & 0 \\
-		0 & \cdots & 0 & -A & I & 0 & \cdots & \cdots & 0 & -B
+		0 & \cdots & 0 & -\bm A_d & \bm I & 0 & \cdots & \cdots & 0 & -\bm B_d
 	\end{bmatrix}, \; 
-	b_{eq} =
+	\bm b_{eq} =
 	\begin{bmatrix}
-		Ax_0 \\ 0 \\ \vdots \\ 0
+		\bm A_d \bm x_0 \\ 0 \\ \vdots \\ 0
 	\end{bmatrix}
 \end{equation}
 
 Performing the multiplication (and abusing notation) shows that:
-\begin{equation}
-	A_{eq}z = b_{eq} \implies
+\begin{equation} \label{eq:lab2_system_constraints}
+	\bm A_{eq} \bm z = \bm b_{eq} \implies
 	\begin{bmatrix}
-		x_1-Bu_0 = Ax_0 \\
-		-Ax_1 + x_2 - Bu_1 = 0 \\
-		\vdots
+		\bm x_1-\bm B_d u_0 = \bm A_d \bm x_0 \\
+		-\bm A_d \bm x_1 + \bm x_2 - \bm B_d u_1 = 0 \\
+		\vdots \\
+		-\bm A_d \bm x_{n-1} + \bm x_n - \bm B_d u_{n-1} = 0 \\
 	\end{bmatrix} \implies
 	\begin{bmatrix}
-		x_1 = Ax_0 + Bu_0 \\
-		x_2 = Ax_1 + Bu_1 \\
-		\vdots
+		\bm x_1 = \bm A_d \bm x_0 + \bm B_d u_0 \\
+		\bm x_2 = \bm A_d \bm x_1 + \bm B_d u_1 \\
+	 	\vdots \\
+		\bm x_n = \bm A_d \bm x_{n-1} + \bm B_d u_{n-1}
 	\end{bmatrix}
 \end{equation}
+\Cref{eq:lab2_system_constraints} describes the system in terms of \cref{eq:lab2_discrete_system} for all timesteps\todo{Again: timesteps illegal?}, and thereby also describes all system constraints for the system.
 
-\todo[inline] {Add the steps in our formulation. How we get to the quadprog-formulation:} 
-\begin{itemize}
-	\item How the model is formulated
-	\item How we formulate it as a QP problem with z
-	\item What out constraints are (equality $ A_{eq} z = B_{eq} $, inequality: $ u_{low} < ... $)
-\end{itemize}
+\subsubsection{Defining the open loop optimization problem}
+Combining the cost function described in \cref{sec:lab2_cost_func} and the constraints described in \cref{sec:lab2_constraints} the open loop optimization problem can be defined as: 
+
+\begin{equation}\label{eq:lab2_open_loop_opt_problem}
+	f(\bm z) = \bm z^T \bm  H \bm z \quad \text{s.t.} \quad 
+	\begin{cases}
+		\bm A_{eq} \bm z = \bm B_{eq} \\
+		\bm z^{low} \leq \bm z \leq \bm z^{high}
+	\end{cases} 
+\end{equation}, 
+where $ \bm z $ is given by \cref{eq:lab2_z}, $ \bm H $ is given by \cref{eq:lab2_H}, $ \bm A_{eq} $ and $ \bm B_{eq} $ is given by \cref{eq:lab2_Aeq_beq}, and $ \bm z_{low} $ and $ \bm z_{high} $ is given by \cref{eq:lab2_z_bounds}.
+
+It is now easy to compare this to the QP formulation given in \cref{eq:lab2_quadprog_std_form}, and implement this in MATLAB. This is done in \cref{lst:lab2_matlab}. 
+
+\textbf{NB:} that the variable names are not exactly the same in the code as in the sections above, but the procedure is the same.
 
 \subsection{The weights of the optimization problem}
 \textit{Try using the values 0.1, 1 and 10 as weights q. Plot the manipulated variable and the output. Comment the results with respect to the different weights chosen.}
@@ -232,7 +341,7 @@ The response shows a major travel-offset from the generated sequence, this is pr
 
 \subsection{MATLAB and Simulink}
 \subsubsection{MATLAB}
-\lstinputlisting[caption= {MATALB code for lab 2}]{code/lab2.m}
+\lstinputlisting[caption= {MATALB code for lab 2}, label={lst:lab2_matlab}]{code/lab2.m}
 \subsubsection{Simulink}
 \begin{figure}[h]
 	\centering
