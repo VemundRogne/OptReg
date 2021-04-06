@@ -136,17 +136,13 @@ Using the script in \cref{lst:lab2_eigenvalues} the eigenvalues became:
 \end{subequations}
 All eigenvalues fulfills the requirement of \cref{eq:lab2_stab_condition}, which means our system is stable! Since two of the eigenvalues are on the unit circle (i.e. has a value of 1), our system is more specifically marginally stable. More information on this subject can be found \todo{Add cite to wikipedia}.
 
-\lstinputlisting[caption= {MATLAB code for calculating eigenvalues for $ \bm A_d $}, label = {lst:lab2_eigenvalues}]{code/calculate_eigenvals.m}
+\lstinputlisting[caption= {MATLAB code for calculating eigenvalues for $ \bm A_d $}, label = {lst:lab2_eigenvalues}, language=Matlab]{code/calculate_eigenvals.m}
 
 \subsection{The open loop optimization problem}
-\textit{How is it formulated?}
 % https://ntnu.blackboard.com/ultra/courses/_24653_1/cl/outline
-As the problem description states, the cost function that must be minimized is described by:
-\begin{equation} \label{eq:lab2_start_cost_func}
-	\phi = \sum_{i=0}^{N-1} \left( \lambda_{i+1} - \lambda_f \right)^2 + qp_{ci}^2 , \quad q \ge 0
-\end{equation}
 %where $q$ is the weight of input-usage. Subject to constraints.
-We can solve this using the MATLAB function quadprog\todo{Add cite to quadprog docs?}, but need to formulate the optimization problem as a QP problem in standard form to do so. This requires the open loop optimization problem to be on the form: 
+The open loop optimization problem is a constrained quadratic program that can be solved using the Matlab function quadprog. The quadprog function requires the input to be in standard form:
+
 \begin{equation}\label{eq:lab2_quadprog_std_form}
 	\min_x \frac{1}{2} \bm x^t \bm H \bm x + \bm f^T \bm x \quad \text{such that} \begin{cases}
 		\bm A \bm x \leq \bm b, \\
@@ -158,12 +154,16 @@ We can solve this using the MATLAB function quadprog\todo{Add cite to quadprog d
 The next subsections describes this process.
 
 \subsubsection{Formulating the cost function} \label{sec:lab2_cost_func}
-\textit{How to you formulate a difference? Im trying to understand that before I write this section}
+As the problem description states, the cost function used in this exercise is:
+\begin{equation} \label{eq:lab2_start_cost_func}
+	\phi = \sum_{i=0}^{N-1} \left( \lambda_{i+1} - \lambda_f \right)^2 + qp_{ci}^2 , \quad q \ge 0
+\end{equation}
 
-\Cref{eq:lab2_start_cost_func} can be rewritten with $ \bm x $ and $ u $:
+Which can be rewritten with $ \bm x $ and $ u $:
 \begin{equation}\label{eq:lab2_start_cost_func_2}
 	f(\bm x, u) = \sum_{i=0}^{N-1} \left( \bm x_{i+1} - \bm x_f \right)^T \bm Q \left( \bm x_{i+1} - \bm x_f \right) + q u^2
-\end{equation}, where
+\end{equation}
+where
 \begin{equation}\label{eq:lab2_lambda_f}
 	\bm x_f = \begin{bmatrix}
 		\lambda_f \\ 0 \\ 0 \\ 0
@@ -177,27 +177,28 @@ The next subsections describes this process.
 		0 & 0 & 0 & 0
 	\end{bmatrix}
 \end{equation}
-However, in this case, we have that $ \lambda_f = 0 $ and therefore $ \bm x_f = \bm 0 $, and \cref{eq:lab2_start_cost_func_2} can be rewritten as an finite-horizon discrete LQR\todo{Add cite to wikipedia description}:
+In this case we have that $ \lambda_f = 0 $ and therefore $ \bm x_f = \bm 0 $, and \cref{eq:lab2_start_cost_func_2} can be rewritten as:
 
 \begin{equation}\label{eq:lab2_LQR}
 	f(\bm x, u) = \sum_{i=0}^{N-1} \bm x_{i+1}^T \bm Q \bm x_{i+1} + r u^2
 \end{equation}
-, where
+where
 \begin{equation}\label{eq:lab2_R}
 	r = q
 \end{equation}
 
-Combining all variables that should be optimized in one vector, we can get rid of the summation in \cref{eq:lab2_LQR}. This means all states and inputs for the $ N $ timesteps\todo{Er timesteps et feil ord?} in one vector. This is described by:
+This summation form can be rewritten into matrix form by using the $z$ vector:
 \begin{equation}\label{eq:lab2_z}
 	\bm z = \begin{bmatrix}
 		\bm x_1 & \bm x_2 & ... & \bm x_n & u_0 & u_1 &... & u_{n-1} 
 	\end{bmatrix}^T
 \end{equation}
 
-\Cref{eq:lab2_LQR} can then be rewritten as: 
+Into the standard quadratic form:
 \begin{equation}\label{eq:lab2_quadprog}
 	f(\bm z) = \bm z^T \bm H \bm z
-\end{equation}, where
+\end{equation}
+with
 \begin{equation}\label{eq:lab2_H}
 	\bm H = \begin{bmatrix}
 		\bm Q & 0 & \cdots  & 0 & 0 & 0 & \cdots & 0\\
@@ -210,7 +211,6 @@ Combining all variables that should be optimized in one vector, we can get rid o
 		0 & 0 & \cdots & 0 & 0 & 0  & \cdots & r
 	\end{bmatrix}
 \end{equation}
-\todo[inline]{Maybe fix this H. I'm not sure of the convention here}
 
 
 \subsubsection{The constraints of the optimization problem} \label{sec:lab2_constraints}
