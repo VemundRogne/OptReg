@@ -325,6 +325,44 @@ The result is lower input usage and a slower response. This is exactly what is s
 From the forum: Here are some questions that will help you figure out what is asked for:
 What will happen when you have some elements that are very large compared to others in a quadratic objective function? Which consequence(s) does this have for the setup in the lab? What is the impact of the length of the control horizon (imagine that the step length, h, is fixed)?
 
+
+The term $(\lambda_i-\lambda_f )^2$ in \cref{eq:lab2_start_cost_func} may cause problems if it becomes too large compared to the term $ q \cdot u^2 $. What is meant by ``too large'' is that the solution will actually never reach $ \lambda_f $ in the given time horizon, because it is theoretically impossible due to the problem constraints. \Cref{fig:lab2_too_large} shows this. This is the solution of the optimization problem when the group used $ \lambda_0 = 40\pi $. It shows that when the error term for the travel is too large, the helicopter will never reach $ \lambda_f $ no matter what.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{figures/lab2_1_5_example.eps}
+	\caption{Optimal trajectories using $\lambda_0 = 40\pi$ .}
+	\label{fig:lab2_too_large}
+\end{figure}
+\Cref{fig:lab2_too_large} also shows that increasing $(\lambda_i-\lambda_f )^2$ has the same effect as increasing $ \bm Q $ relative to $ r $ in \cref{eq:lab2_LQR}; it will prioritize to minimize $(\lambda_i-\lambda_f )^2$ and use much input to achieve this. We say that the ``fuel'' is cheap.
+
+The ``solution'' to this problem is to increase the time horizon either by adding more steps (increase $N$) or increase the sampling time. This will give the optimization problem enough time to reach the $ \lambda_f $. This is shown in \cref{fig:lab2_inc_delta_t}. In this case the sampling time was doubled from $ 0.25 $ to $ 0.5 $, and the optimization problem had enough time to reach the final value. 
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{figures/lab2_1_5_example_2.eps}
+	\caption{Optimal trajectories using $\lambda_0 = 40\pi$ and $ \Delta t = 0.5$ .}
+	\label{fig:lab2_inc_delta_t}
+\end{figure}
+
+\subsubsection{An improved objective function}
+In the case of the lab setup, it does not really make any sense to have $ \lambda_i-\lambda_f >  2\pi $, because the helicopter is always on a circles edge. The result of this is that $ \lambda = 0 $, $ \lambda = 2\pi $ and $ \lambda = 4\pi $ and so on, is essentially the same helicopter-configuration. 
+
+Also, the way the objective function is set up, it will not choose the always choose the shortest way to $ \lambda_f $. If $ \lambda_0 = \frac{3}{4} \pi $, this means that the helicopter is $\frac{3}{4} \pi $ radians from $ \lambda_f $ in the counter-clockwise direction and  $\frac{1}{4} \pi $ radians from  $ \lambda_f $ in the clockwise direction. Therefore, it is most logical to go the clockwise direction, because this requires the least amount of input. However, the way the objective function is chosen, it will go in the counter-clockwise direction.
+
+Therefore, a suggested solution from the group, is to use the following formula for the travel error: 
+\begin{equation}
+	e_{\lambda} = \begin{cases}
+		\text{mod}(\lambda_i-\lambda_f, 2\pi) \quad &\text{if} \quad \text{mod}(\lambda_i-\lambda_f, 2\pi) \leq \pi \\
+		-(2 \pi - \text{mod}(\lambda_i-\lambda_f, 2\pi)) \quad &\text{else}
+		\end{cases}
+\end{equation}, where $ \text{mod} $ is the modulus operator.
+
+This will insure that the helicopter always chooses the shortest direction of travel, and also ignore any $ \lambda_i-\lambda_f \geq 2\pi $ And the objective function is then written as:
+\begin{equation} 
+	\phi = \sum_{i=0}^{N-1} e_{\lambda}^2 + qp_{ci}^2 , \quad q \ge 0
+\end{equation}
+% 1. For høyt term gir billig ip
+% 2. E det for høy differanse vil den ikke klare å komme til \lambda_f
+
 \clearpage
 \subsection{Experimental results}\label{kap:task_10_2_experimental_results}
 \textit{Printouts of data from relevant experiments (plots).
