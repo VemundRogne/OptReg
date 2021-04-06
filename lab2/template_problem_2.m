@@ -26,7 +26,12 @@ mx = size(A1,2); % Number of states (number of columns in A)
 mu = size(B1,2); % Number of inputs(number of columns in B)
 
 % Trajectory start and end values
-lambda_0 = pi;
+lambda_0 = 4/3*pi; %Some vlaue
+lambda_0 = mod(lambda_0, 2*pi);
+if (lambda_0 > pi)
+    lambda_0 = -(2*pi - lambda_0);
+end
+    
 lambda_f = 0;
 % Initial values
 x1_0 = lambda_0;                        % Lambda
@@ -98,28 +103,28 @@ num_variables = 5/delta_t;
 zero_padding = zeros(num_variables,1);
 unit_padding  = ones(num_variables,1);
 
-u   = [zero_padding; u; zero_padding];
-x1  = [pi*unit_padding; x1; zero_padding];
-x2  = [zero_padding; x2; zero_padding];
-x3  = [zero_padding; x3; zero_padding];
-x4  = [zero_padding; x4; zero_padding];
+% u   = [zero_padding; u; zero_padding];
+% x1  = [lambda_0*unit_padding; x1; zero_padding];
+% x2  = [zero_padding; x2; zero_padding];
+% x3  = [zero_padding; x3; zero_padding];
+% x4  = [zero_padding; x4; zero_padding];
 
 %% Plotting
 t = 0:delta_t:delta_t*(length(u)-1);
 
 figure(2)
-subplot(511)
+subplot(211)
 stairs(t,u),grid
 ylabel('u')
-subplot(512)
-plot(t,x1,'m',t,x1,'mo'),grid
-ylabel('lambda')
-subplot(513)
-plot(t,x2,'m',t,x2','mo'),grid
-ylabel('r')
-subplot(514)
-plot(t,x3,'m',t,x3,'mo'),grid
-ylabel('p')
-subplot(515)
-plot(t,x4,'m',t,x4','mo'),grid
-xlabel('tid (s)'),ylabel('pdot')
+subplot(212)
+plot(t,x1),grid
+ylabel('\lambda')
+% subplot(513)
+% plot(t,x2,'m',t,x2','mo'),grid
+% ylabel('r')
+% subplot(514)
+% plot(t,x3,'m',t,x3,'mo'),grid
+% ylabel('p')
+% subplot(515)
+% plot(t,x4,'m',t,x4','mo'),grid
+% xlabel('tid (s)'),ylabel('pdot')
