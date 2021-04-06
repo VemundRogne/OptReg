@@ -26,15 +26,23 @@ def plot_1():
     df_2 = optlab.open_mat("LAB2/lab2_without_pitch_setpoints.mat", LABn=2)
     df_2 = add_opt(df_2)
 
+    df_3 = df.copy(deep=True)
+    df_3['Travel'] = df_3['Travel'] - (df_2['Travel'] - 3.14159)
+    df_3['Pitch'] = None
+
     fig, ax = optlab.plot.plot_comparisons(
-        [df, df_2],
-        labels = ["Flight with optimal setpoints", "Flight without setpoints"],
+        [df, df_2, df_3],
+        labels = [
+            "Flight with optimal setpoints",
+            "Flight without setpoints",
+            "Compensated travel (postprocessed)"],
         columns_to_compare = ['Travel', 'Pitch'],
         xlim=(0, 30),
         #ylims=[[0, 5], None],
         plot_optimal_trajectory=True
     )
     fig.suptitle("Optimal control of pitch/travel without feedback")
+    fig.set_size_inches(8, 6)
     optlab.plot.export_plot("LAB2_plot_1")
 
 if __name__ == '__main__':
