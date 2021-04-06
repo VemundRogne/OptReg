@@ -367,20 +367,50 @@ It is easily implemented in the code, as \cref{lst:improved_lambda_0} shows.
 
 \clearpage
 \subsection{Experimental results}\label{kap:task_10_2_experimental_results}
-\textit{Printouts of data from relevant experiments (plots).
-Discussion and analysis of the results.
-Answer 10.2.2.7 here.}
+The group performed two experiments with the helicopter:
+\begin{enumerate}
+	\item Flight with optimal setpoints: $u_k = u_k^*$
+	\item Flight without setpoints: $u_k = 0$
+\end{enumerate}
+Both fligths, along with the optimal trajectory and a compensated trajectory are plotted in \cref{fig:LAB2_plot_1}.
 
 \begin{figure}[h]
-	\includegraphics[width=\linewidth]{figures/LAB2_plot_1.png}
+	\centering
+	\includegraphics[width=0.8\linewidth]{figures/LAB2_plot_1.png}
 	\caption{Results of LAB2}
 	\label{fig:LAB2_plot_1}
 \end{figure}
 
-As \cref{fig:LAB2_plot_1} clearly shows the control sequence did not yield the desired travel-response. This is expected, as there is no feedback - any small variations will move the response from the planned one. In this case the variations are quite large, particularly the offset from what the encoder measures as $0$ pitch as opposed to what the real-world $0$ pitch is. This difference makes the helicopter travel while it keeps $0$-pitch.
+\subsubsection{Pitch-control}
+It is clear that both fligths have adequate control of pitch. In the case where $u_k = 0$ the pitch is close to $0$. In the case where $u_k = u_k^*$ the pitch is close to the optimal trajectory.
 
-The response shows a major travel-offset from the generated sequence, this is primarily because of the offset described above. The pitch-response is however quite close to the optimal trajectory - this is expected as there is not the same level of offset as in travel.
+This is expected as pitch-control is a closed loop - the basic control layer has a PD controller that ensures that pitch follows the reference $u_k$.
 
+\subsubsection{Travel-drift}\label{kap:LAB2_travel_drift_causes}
+From the flight with $u_k = 0$ it is clear that there is significant travel-drift present in the helicopter. Even when pitch is very close to $0$ the helicopter travels quickly far away from the initial point.
+
+There are three main causes of drift:
+\begin{enumerate}
+	\item The encoder-measurement of pitch is not precise
+	\item Helicopter inbalance
+	\item Disturbances
+\end{enumerate}
+
+The \textbf{encoder} does not measure pitch at the helicopter in relation to gravity, rather it measures the angle between the helicopter blades and the platform that holds them. Because that platform is not build to be precisely the same as gravity (and because of wear-and-tear) the measured value $0$ is not exactly 0. This causes the helicopter to have a pitch offset, which in turn generates travelrate and travel.
+
+The \textbf{imbalance} may be that one rotor is stronger than the other, or that the rotors have offsets from the vertical position. Theese imbalances may generate a sidewards force, even when the helicopter is pitced to $0$, which in turn generates travelrate and travel.
+
+The \textbf{disturbances} is the most general effect. Air-pressure, wind, temperature effects, walls, and so on. All of theese disturbances may cause drifts or noise in the travel. 
+
+The group believes that the main cause of the drift observed in the helicopter is the offset in the encoder.
+
+\subsubsection{Conclusion}
+As \cref{fig:LAB2_plot_1} clearly shows the control sequence did not yield the desired travel-response. This was expected: there are as explained in \cref{kap:LAB2_travel_drift_causes} many causes of drift and without any feedback the helicopter will quicly deviate from the desired response.
+
+Nevertheless it is possible to verify the control sequence by compensating for the drift. The compensation is done by taking the travel of the flight with optimal setpoints and subtracing the drift logged in the flight without setpoints. The result is plotted as compensated travel in \cref{fig:LAB2_plot_1}. This clearly shows that without the major drift the helicopter would be much closer to the optimal trajectory.
+
+
+\clearpage
 \subsection{MATLAB and Simulink}
 \subsubsection{MATLAB}
 \lstinputlisting[caption= {MATALB code for lab 2}, label={lst:lab2_matlab}]{code/lab2.m}
