@@ -187,14 +187,13 @@ where
 	r = q
 \end{equation}
 
-This summation form can be rewritten into matrix form by using the $z$ vector:
+Defining the the $z$ vector as:
 \begin{equation}\label{eq:lab2_z}
 	\bm z = \begin{bmatrix}
 		\bm x_1 & \bm x_2 & ... & \bm x_n & u_0 & u_1 &... & u_{n-1} 
 	\end{bmatrix}^T
 \end{equation}
-
-Into the standard quadratic form:
+we can rewrite summation form in \cref{eq:lab2_LQR} to matrix-form:
 \begin{equation}\label{eq:lab2_quadprog}
 	f(\bm z) = \bm z^T \bm H \bm z
 \end{equation}
