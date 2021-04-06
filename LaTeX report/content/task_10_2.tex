@@ -400,16 +400,16 @@ When the helicopter starts, it reads the initial \textbf{encoder}-value for the 
 
 %The \textbf{encoder} does not measure pitch at the helicopter in relation to gravity, rather it measures the angle between the helicopter blades and the platform that holds them. Because that platform is not build to be precisely the same as gravity (and because of wear-and-tear) the measured value $0$ is not exactly 0. This causes the helicopter to have a pitch offset, which in turn generates travelrate and travel.
 
-The \textbf{imbalance} may be that one rotor is stronger than the other, or that the rotors have offsets from the vertical position. Theese imbalances may generate a sidewards force, even when the helicopter is pitced to $0$, which in turn generates travelrate and travel.
+The \textbf{imbalance} may be that one rotor is stronger than the other, or that the rotors have offsets from the vertical position. These imbalances may generate a sidewards force, even when the helicopter is pitched to $0$, which in turn generates travelrate and travel.
 
-The \textbf{disturbances} is the most general effect. Air-pressure, wind, temperature effects, walls, and so on. All of theese disturbances may cause drifts or noise in the travel. 
+The \textbf{disturbances} is the most general effect. Air-pressure, wind, temperature effects, walls, and so on. All of these disturbances may cause drifts or noise in the travel. 
 
 The group believes that the main cause of the drift observed in the helicopter is the offset in the encoder.
 
 \subsubsection{Conclusion}
-As \cref{fig:LAB2_plot_1} clearly shows the control sequence did not yield the desired travel-response. This was expected: there are as explained in \cref{kap:LAB2_travel_drift_causes} many causes of drift and without any feedback the helicopter will quicly deviate from the desired response.
+As \cref{fig:LAB2_plot_1} clearly shows the control sequence did not yield the desired travel-response. This was expected, as there are many causes of drift and disturbances. Without any feedback the helicopter will quickly deviate from the desired response, since it will not have any mechanisms to detect deviations from the optimal trajectories.
 
-Nevertheless it is possible to verify the control sequence by compensating for the drift. The compensation is done by taking the travel of the flight with optimal setpoints and subtracing the drift logged in the flight without setpoints. The result is plotted as compensated travel in \cref{fig:LAB2_plot_1}. This clearly shows that without the major drift the helicopter would be much closer to the optimal trajectory.
+Nevertheless it is possible to verify the control sequence by compensating for the drift. The compensation can be done by taking the travel of the flight with optimal setpoints, and subtracting the drift logged in the flight without setpoints (i.e. $ u_k = 0 $). The result is plotted as compensated travel in \cref{fig:LAB2_plot_1}. This clearly shows that without the major drift the helicopter would be much closer to the optimal trajectory.
 
 
 \clearpage
