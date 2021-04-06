@@ -306,14 +306,18 @@ It is now easy to compare this to the QP formulation given in \cref{eq:lab2_quad
 \subsection{The weights of the optimization problem}
 \textit{Try using the values 0.1, 1 and 10 as weights q. Plot the manipulated variable and the output. Comment the results with respect to the different weights chosen.}
 
-Weighing the input higher by increasing the value of $q$ means that we are placing a higher cost of input - reducing the input usage. This will in turn mean that the cost of deviation in $\lambda$ is in relation to the input, cheaper. The result is lower input usage and a slower response. This is exactly what is seen in \cref{fig:lab2optimalu}.
+$ \bm Q $ and $ r $ in \cref{eq:lab2_LQR} are typically called weight-matrices. Their relative values reflect how the LQ regulator prioritize the objectives (the state and the input) relative ot each other. In this problem, $ \bm Q $ is kept constant and the group changed the value of $ r $ (or $ q $ as it is called in the problem description). Increasing the value of $ q $ means that we are placing a higher cost of input - reducing the input usage. In other words, a smaller $ q $ will make the ``fuel'' (or input) expensive. 
+%This will in turn mean that the cost of deviation in $\lambda$ is, in relation to the input, cheaper. 
+The result is lower input usage and a slower response. This is exactly what is seen in \cref{fig:lab2_optimalu}.
 
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=\linewidth]{figures/lab2_optimal_u}
-	\caption{Manipulated variable and outputs with different values of $q$.}
-	\label{fig:lab2optimalu}
+	\caption{Optimal trajectories for the manipulated variable and outputs with different values of $q$.}
+	\label{fig:lab2_optimalu}
 \end{figure}
+
+\Cref{fig:lab2_optimalu} also shows how the constraints work in practice. Studying the plot of $ u $, we can see that no matter how low $ q $ is, the input never goes beyond the specified range of $ \pm\frac{30}{180} \pi $.
 
 \subsection{The objective function}
 \textit{Furthermore, discuss the objective function (15) (in the lab assignment text) in particular the term $(\lambda_i-\lambda_f )^2$. For instance, could any unwanted effects arise from steering the helicopter to $\lambda =\lambda_f$ with this objective function?}
