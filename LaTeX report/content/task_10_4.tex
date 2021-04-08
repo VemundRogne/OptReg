@@ -136,17 +136,26 @@ In the end we chose this configuration as out best tuning:
 \end{equation}
 %A signal generator was established to generate signals for the references $p_c$ and $e_c$. This signal generator is shown in \todo{Add ref}. The group chose to use a signal generator for tuning to guarantee a reference signal the helicopter was able to follow. The reason the optimal reference trajectory were not used in the tuning process, was that it was not certain this trajectory could be achieved by the helicopter. Therefore it seemed most reasonable to seperate tuning and optimal trajectory.
 
-\subsection{Finding a reasonable trajectory}
+\subsubsection{Finding a reasonable trajectory}
 With a good
  
 
-
-
-
-
-
 \subsection{Decoupled model}
 \textit{Answer 10.4.2.7}
+As states in the problem description, the two last states are completely decoupled from the first four states. Or put in other words, the dynamics describing elevation is completely independent on the pitch and travel. This is of course not the case in reality, and illustrates how ``simple'' are model of the system actually is!
+
+It becomes quite obvious from the plots \todo{Fin plots that shows this} that the elevation response is heavily coupled with both pitch and travel. Plot \todo{add cref} shows this as when the pitch is changed at time \todo{add time point}, the elevation also changes when it in fact should have been still as calculated in the optimal trajectory. Also there is a lot of rotational forces that have not been considered in the model. E.g. the travel rate $ r $ will create a centripetal force going along the helicopter arm, and point inwards to the origin of the arm. If the helicopter arm is not completely horizontal, this centripetal force will have a component in the direction of the elevation. The main point is that our model is a very simplified version of the real physics of the helicopter. In reality the helicopter is a complex system, which we can never define 100 \% exact with a mathematical formulation. It is impossible.
+
+The effect this has on our optimal trajectory, is that our solver considers elevation as a system that is completely independent on the other states. The implication of this is that our optimal trajectory for elevation is the same, no matter how the trajectory for pitch and travel looks like. \todo[inline]{Is this statement correct? Test this} This can of course be turned the other way around, as the optimal pitch- and travel-trajectory is also independent on the optimal elevation trajectory. The optimal trajectories are ``wrong'', since the elevation is clearly not independent on the other states! Our helicopter will therefor have a hard time following the optimal trajectories as they are not a good representation of the reality.
+
+\subsubsection{Possible solutions}
+There are no correct solution to this problem, as we will never be able to describe the real-world system exact with mathematical formulations. There are however, some ``solutions'' that will improve our system and reduce the errors that arises from our decoupled model.
+
+The obvious solution is to couple the model by making it more realistic. There are forces that we can include in our model to make it more accurate. These are for instance the centripetal force mentioned above, friction forces, forces caused by the ground effect, and so on. Of course we can only add simplified equations for these forces, but it would nevertheless increase the accuracy of our model! We will never be able to take into account all forces, and many forces are actually impossible to model mathematically. Therefore we need to identify the forces that has the biggest impact on the error in our model. This is a hard task in itself and can be considered a downside of this approach. Another downside is that our model will quickly become complex and hard to understand. However, the group thinks that it would not be to much work to take into account the most obvious rotational forces, which could possibly cause a big improvement in the optimal solution.
+
+Another solution is not to change the mathematical model of the helicopter at all, but rather change the regulator for the helicopter. Maybe adding integral-effect in the pitch- and elevation-controller would help decreasing the error? Or maybe other feedback-loop implementations could yield better results? There are many possible solutions to improve the regulation of the helicopter! Using this ``solution'', our optimal solution will still be wrong, but we can reduce the error by using a better regulator. The advantage of this is that we can spend less time making a more exact mathematical model, and rather focus on making a regulator that is more robust for errors. The disadvantage is of course that our optimal trajectories are still wrong.
+
+
 
 \subsection{MATLAB and Simulink}
 \textit{Code and diagrams go here}
