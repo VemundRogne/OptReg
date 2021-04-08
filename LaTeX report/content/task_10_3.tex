@@ -1,19 +1,23 @@
 \documentclass[../main.tex]{subfiles}
 \begin{document}
-	
+
 \section{Optimal Control of Pitch/Travel with Feedback (LQ)}
-In this task we add feedback to the optimal controller that we developed in \cref{kap:Part2OptimalControlWithoutFeedback}. Feedback is clearly needed as the experimental results in \cref{kap:task_10_2_experimental_results} show that the helicopter response quickly deviates from the optimal trajectory. The results of this laboratory exercise shows that adding feedback greatly improves the perfomance of the helicopter.
+In this task we add feedback to the optimal controller that we developed in \cref{kap:Part2OptimalControlWithoutFeedback}. Feedback is clearly needed as¨the experimental results in \cref{kap:task_10_2_experimental_results} show that the helicopter response quickly deviates from the optimal trajectory because of pitch-offset - adding feedback could reduce or eliminate this deviation.
+
+The results achieved in this section shows that adding feedback greatly improves performance.
 
 \subsection{Introducing feedback}
-There are many ways of adding feedback to a system. In this case the assignment states that we are to add feedback between the calculated optimal trajectory and the actual trajectory. In other words the feedback introduced here modifies the input $u$ to get closer to the optimal trajectory $x^*$.
+There are many approaches to adding feedback, but in this assignment only two will be considered: linear state feedback and model predictive control.
 
-The pitch-control input is now governed by the equation:
+Linear state feedback adds a new control layer below the optimization layer, the advanced control layer. This layer controls the pitch setpoint to the basic control layer based on a control law that considers the optimal trajectory and the current state of the system. If the states deviate from the optimal value the input is changed accoridn gto the pitch-control equation:
 \begin{equation}\label{eq:lab3_feedback}
 	u_k = u_k^* - \bm{K}^T(\bm x_k - \bm x_k^*)
 \end{equation}
-where $u_k^*$ and $\bm x_k^*$ are the optimal input and state trajectories predicted in the optimization layer.
+where $u_k^*$ and $\bm x_k^*$ are the optimal input and state trajectories predicted in the optimization layer, $u_k$ is the next input and $x_k$ is the current state. $K$ is the linear state feedback term. 
 
-This feedback equation modifies the input $u_k$ to the pitch-controller if the state $x_k$ deviates from the optimal value $x_k^*$. The feedback gain $K$ is calculated using an LQ controller.
+In this exercise the gain matrix $K$ is calculated as an LQ controller, see \cref{kap:task_10_3_LQ_controller} for more info about the exact implementation.
+
+Model Predictive Control (MPC) is a completely different solution: the optimal trajectory is recalculated at every timestep. See \cref{kap:10_3_mpc} for more info about how that could be implemented here.
 
 \subsection{LQ controller}\label{kap:task_10_3_LQ_controller}
 As explained in the problem description\todo{cref}, an LQ (or linear-quadratic) controller, solves the quadratic objective function given by
@@ -31,7 +35,7 @@ The matrix $Q$ and the scalar $R$ are the weights of the optimalization problem.
 
 In this system there is only one constraint on the input; that it shall not exceed 30 degrees. Therefore a small R-value compared to Q is warranted. This will produce a regulator that tries harder to minimize state-deviation than input-deviation.
 
-\subsection{Model Predictive Control}
+\subsection{Model Predictive Control}\label{kap:10_3_mpc}
 Model Predictive Control is another way of introducing feedback to an optimal control system. In an MPC controlled system the optimal response and input is recalculated at every timestep, the input used is simply the first of the optimal input values calculated at every step.
 
 This is a drastically different approach to the LQ-method impemented in this laboratory exercise.
