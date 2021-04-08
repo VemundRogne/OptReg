@@ -395,7 +395,7 @@ There are three main causes of drift:
 	\item Disturbances
 \end{enumerate}
 
-When the helicopter starts, it reads the initial \textbf{encoder}-value for the pitch, and assumes this is equal to zero. However, if the platform is not built precisely, the encoder axis may not be 100 \% aligned with the corresponding real world axis. There are many possible reasons for this, but it will not be discussed further. Regardless of the cause, the effect will be the same: The measured encoder-value will have a constant offset compared to real world-values. This will again cause the helicopter to drift when it measures zero pitch.
+When the helicopter starts, it reads the initial \textbf{encoder}-value for the pitch, and assumes this is equal to zero. However, if the platform is not built precisely, the encoder axis may not be 100 \% aligned with the corresponding real world axis. There are many possible reasons for this, but it will not be discussed further. Regardless of the cause, the effect will be the same: The measured encoder-value will have a constant offset compared to real world-values. This will again cause the helicopter to drift when it measures zero pitch. This offset is clearly shown in \cref{fig:LAB3_Q_variations} where the helicopter with feedback pitches approximately $5.7 ^{\circ} $ to keep the travel constant.
 
 %The \textbf{encoder} does not measure pitch at the helicopter in relation to gravity, rather it measures the angle between the helicopter blades and the platform that holds them. Because that platform is not build to be precisely the same as gravity (and because of wear-and-tear) the measured value $0$ is not exactly 0. This causes the helicopter to have a pitch offset, which in turn generates travelrate and travel.
 
