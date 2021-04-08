@@ -11,6 +11,39 @@ def load_tests():
     ]
 
 
+def plot_tunings():
+    tests = load_tests()
+
+    fig, ax = plt.subplots(nrows=3, ncols=2, sharex=True)
+    ax = list(ax.flatten())
+
+    fig, ax = optlab.plot.plot_comparisons(
+        data_to_compare = [
+            #tests[12],
+            #tests[13],
+            tests[14],
+            #tests[15],
+        ],
+        columns_to_compare=["Travel", "Travelrate", "Pitch", "Pitchrate", "Elevation", "Elevationrate"],
+        labels = [
+            #"Q = diag([50,1,1,1,50,1])",
+            #"Q = diag([15,1,1,1,15,1])",
+            "Q = diag([15,1,0.1,1,15,1])",
+            #"Q = diag([15,1,10,1,15,1])"
+        ],
+        plot_optimal_trajectory=True,
+        xlim=[0, 22.5],
+        fig = fig,
+        ax = ax,
+        forced_xlabel_loc=[4],
+        legend_ncols=4
+    )
+
+    fig.set_size_inches(12, 9)
+
+    return fig, ax
+
+
 def plot_optimal_trajectory():
     tests = load_tests()
 
@@ -76,6 +109,10 @@ if __name__ == '__main__':
     #fig.suptitle("The reference trajectory")
     #optlab.plot.export_plot("LAB4_reference_trajectory")
 
-    fig, ax = plot_different_travel_gains()
-    fig.suptitle("Different travel-gains")
-    optlab.plot.export_plot("LAB4_travel_gains", rect=(0,0.05, 1, 1))
+    #fig, ax = plot_different_travel_gains()
+    #fig.suptitle("Different travel-gains")
+    #optlab.plot.export_plot("LAB4_travel_gains", rect=(0,0.05, 1, 1))
+
+    fig, ax = plot_tunings()
+    fig.suptitle("Best tuning of the helicopter in LAB4")
+    optlab.plot.export_plot("LAB4_best_tunings", rect=(0, 0.05, 1, 1))
