@@ -31,7 +31,10 @@ def plot_comparisons(
     plot_optimal_trajectory = False,
     plot_only_optimal_trajectory = False,
     xlim = None,
-    legend_loc = None
+    legend_loc = None,
+    fig = None,
+    ax = None,
+    forced_xlabel_loc = []
 ):
     """ Plots a comparison between different runs 
     
@@ -40,9 +43,6 @@ def plot_comparisons(
         labels: labels of each pandas object in the datalist
         columns_to_compare: list of the columns that you want to plot against eachother
     """
-    fig = None
-    ax = None
-
     # Plot the reference trajectory
     if plot_optimal_trajectory == True:
         fig, ax = plot_flight(
@@ -52,7 +52,10 @@ def plot_comparisons(
             flightlabel="optimal trajectory",
             linecolor='black',
             xlim = xlim,
-            legend_loc = legend_loc
+            legend_loc = legend_loc,
+            fig = fig,
+            ax = ax,
+            forced_xlabel_loc=forced_xlabel_loc
         )
     
     if plot_only_optimal_trajectory:
@@ -67,7 +70,8 @@ def plot_comparisons(
             fig=fig,
             ax=ax,
             xlim=xlim,
-            legend_loc = legend_loc
+            legend_loc = legend_loc,
+            forced_xlabel_loc=forced_xlabel_loc
         )
     return fig, ax
 
@@ -84,7 +88,8 @@ def plot_flight(
         flightlabel = "",
         label_on = False,
         linecolor = None,
-        legend_loc = None
+        legend_loc = None,
+        forced_xlabel_loc = [],
     ):
     if fig == None and ax == None:
         # Create the figure and axes
@@ -131,5 +136,8 @@ def plot_flight(
         axis.set_title(columns[i])
     
     ax[-1].set_xlabel("Time [s]")
-    
+
+    for loc in forced_xlabel_loc:
+        ax[loc].set_xlabel("Time [s]")
+
     return fig, ax
