@@ -42,31 +42,31 @@ def plot_different_travel_gains():
 
     fig, ax = optlab.plot.plot_comparisons(
         data_to_compare = [
-            tests[0],
-            tests[1],
-            tests[2],
-            tests[3],
-            tests[9],
             tests[10],
+            tests[9],
+            tests[3],
+            tests[2],
+            tests[1],
+            tests[0],
         ],
         columns_to_compare=["Travel", "Travelrate", "Pitch", "Pitchrate", "Elevation", "Elevationrate"],
         labels = [
-            "Q = diag([1, ...]",
-            "Q = diag([5, ...]",
-            "Q = diag([10, ...]",
-            "Q = diag([15, ...]",
-            "Q = diag([50, ...]",
             "Q = diag([1000, ...]",
+            "Q = diag([50, ...]",
+            "Q = diag([15, ...]",
+            "Q = diag([10, ...]",
+            "Q = diag([5, ...]",
+            "Q = diag([1, ...]",
         ],
         plot_optimal_trajectory=True,
-        xlim=[0, 30],
+        xlim=[0, 22.5],
         fig = fig,
         ax = ax,
         forced_xlabel_loc=[4],
-        legend_loc="right"
+        legend_ncols=4
     )
 
-    fig.set_size_inches(11, 8)
+    fig.set_size_inches(12, 9)
 
     return fig, ax
 
@@ -78,4 +78,4 @@ if __name__ == '__main__':
 
     fig, ax = plot_different_travel_gains()
     fig.suptitle("Different travel-gains")
-    optlab.plot.export_plot("LAB4_travel_gains")
+    optlab.plot.export_plot("LAB4_travel_gains", rect=(0,0.05, 1, 1))
