@@ -29,6 +29,7 @@ def plot_comparisons(
     labels: list,
     columns_to_compare: list,
     plot_optimal_trajectory = False,
+    plot_only_optimal_trajectory = False,
     xlim = None,
     legend_loc = None
 ):
@@ -53,6 +54,9 @@ def plot_comparisons(
             xlim = xlim,
             legend_loc = legend_loc
         )
+    
+    if plot_only_optimal_trajectory:
+        return fig, ax
 
     for i, data in enumerate(data_to_compare):
         fig, ax = plot_flight(
