@@ -113,7 +113,7 @@ Since the group was not able to make a tuning-trajectory for the states and inpu
 	\caption{Optimal trajectories using  $q_1 = q_2 = 1$ in the cost function.}
 \end{figure}
 
-In the tuning process we decided to keep $ \bm R $ and $ \bm Q $ as diagonal matrices. $ \bm R $ was set constant equal the identity matrix, i.e. $\bm R = \bm I_2$. The diagonal elements of $ \bm Q $ was then changed to get a good tuning. As in \todo{cref lab3 lqr tuning}each diagonal entry in Q corresponds to the corresponding state in \cref{eq:lab4_cont_ss} \todo{REFORMULATE}. This makes the tuning process simpler since a change in an entry $ \bm Q $ has an expected impact on the response. Higher values of $ \bm Q $ results in inputs with larger magnitude, which again gives a faster response. Having too small values on the diagonal of $ \bm Q $ will therefor give a slow response. Having too large values on the diagonal of $ \bm Q $ will also have unwanted effects as the helicopter approaches a less stable tuning. This is shown in \cref{fig:lab4_diff_Q_values} where the low valued $ \bm Q $ gives a slower response, and a higher valued $ \bm Q $ gives an oscillating response (especially for the pitch rate). The oscillations are noticeable in th ereal world as a shaking helicopter.
+In the tuning process we decided to keep $ \bm R $ and $ \bm Q $ as diagonal matrices. $ \bm R $ was set constant equal the identity matrix, i.e. $\bm R = \bm I_2$. The diagonal elements of $ \bm Q $ was then changed to get a good tuning. As in \todo{cref lab3 lqr tuning}each diagonal entry in Q corresponds to the corresponding state in \cref{eq:lab4_cont_ss} \todo{REFORMULATE}. This makes the tuning process simpler since a change in an entry $ \bm Q $ has an expected impact on the response. Higher values of $ \bm Q $ results in inputs with larger magnitude, which again gives a faster response. Having too small values on the diagonal of $ \bm Q $ will therefor give a slow response. Having too large values on the diagonal of $ \bm Q $ will also have unwanted effects as the helicopter approaches a less stable tuning. This is shown in \cref{fig:lab4_diff_Q_values} where the low valued $ \bm Q $ gives a slower response, and a higher valued $ \bm Q $ gives an oscillating response (especially for the pitch). The oscillations are noticeable in th ereal world as a shaking helicopter.
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=\linewidth]{figures/LAB4_travel_gains.png}
@@ -121,7 +121,7 @@ In the tuning process we decided to keep $ \bm R $ and $ \bm Q $ as diagonal mat
 	\label{fig:lab4_diff_Q_values}
 \end{figure}
 
-Using the same approach as in \todo{cref lab 3 }the group tuned entry-by-entry in $ \bm Q $. In the end the best tuning was achieved using: 
+Using the same approach as in \todo{cref lab 3 }the group tuned entry-by-entry in $ \bm Q $. The main focus was a tuning that followed the travel-trajectory well. In the end the best tuning was achieved using: 
 \begin{equation}\label{key}
 	\bm Q = \begin{bmatrix}
 		0 & 0 & 0 & 0 & 0 \\
@@ -145,7 +145,11 @@ This gave the results in \cref{fig:LAB4_best_tuning}
 \end{figure}
 
 \subsubsection{Finding a reasonable trajectory}
-With a good
+The group had two criterions on what defined a reasonable trajectory:
+\begin{enumerate}
+	\item The trajectory created should be physical possible (or at least close to possible) for the helicopter to achieve.
+	\item The time used to go from $ \lambda_0 $ to $ \lambda_f $ should be as small as possible.
+\end{enumerate}
  
 
 \subsection{Decoupled model} \label{sec:lab4_decoupled}
