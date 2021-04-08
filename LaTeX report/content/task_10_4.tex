@@ -106,7 +106,12 @@ Since the group was not able to make a tuning-trajectory for the states and inpu
 In the tuning process we decided to keep R and Q as diagonal matrices. R was set constant equal the identity matrix, i.e. $R = I_2$. The diagonal elements of Q was then changed to get a good-tuned system. Each diagonal entry in Q corresponds to the corresponding stat in \cref{eq:lab4_cont_ss} \todo{REFORMULATE}, so the tuning process was done by tuning state-by-state. 
 
 Since we are interested in following the optimal trajectory for the travel, we started by tuning this state, i.e. changing Q(1, 1) \todo{add ref to matlab script}. The figure below shows the helicopter states to the optimal trajectory for different Q(1, 1) values. As expected, a higher value of Q made the system use more \"fuel\" to follow the travel. Using too large value caused the helicopter's pitch to oscillate quite much, and too low resulted in a bad response.
-\missingfigure{Different Q(1, 1) values}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{figures/LAB4_travel_gains.png}
+	\caption{Her er alle verdiene vi brukte, bør nok rydde opp litt.}
+\end{figure}
 
 The group then proceeded to tuning the elevation. Since the helicopter did not have a good response for the elevation (SEE PLOT...) we decided to increase Q(5, 5) to use more \"fuel\" to get a response that followed the optimal elevation...
 \missingfigure{Different Q(5, 5) values}
