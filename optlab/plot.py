@@ -35,7 +35,8 @@ def plot_comparisons(
     legend_loc = None,
     fig = None,
     ax = None,
-    forced_xlabel_loc = []
+    forced_xlabel_loc = [],
+    legend_ncols = 1
 ):
     """ Plots a comparison between different runs 
     
@@ -74,6 +75,10 @@ def plot_comparisons(
             legend_loc = legend_loc,
             forced_xlabel_loc=forced_xlabel_loc
         )
+
+    handles, labels = ax[0].get_legend_handles_labels()
+    fig.legend(handles, labels, loc='lower center', ncol=legend_ncols)
+
     return fig, ax
 
 
@@ -130,8 +135,8 @@ def plot_flight(
     if xlim is not None:
         plt.xlim(xlim)
 
-    for axis in ax:
-        axis.legend(loc=legend_loc)
+#    for axis in ax:
+#        axis.legend(loc=legend_loc)
     
     for i, axis in enumerate(ax):
         axis.set_title(columns[i])
