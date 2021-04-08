@@ -2,7 +2,14 @@
 
 \begin{document}
 \section{10.4 - Optimal Control of Pitch/Travel and Elevation with Feedback}
-In the previous labs the elevation has been disregarded, and assumed to be zero. In this lab, elevation is not disregarded, and the group had to calculate an optimal trajectory for the elevation as well. 
+In the previous labs the elevation has been disregarded, and assumed to be zero. In this lab, elevation is not disregarded, and the group had to calculate an optimal trajectory for the elevation as well. The criteria to be minimized was
+\begin{equation}\label{eq:lab4_cost_func}
+	\phi = \sum_{i=0}^{N-1} (\lambda_{i + 1} - \lambda_f)^{2} + q_1 p_{ci}^2 + q_2 e_{ci} ^2
+\end{equation}
+and the constraint on the elevation was:
+\begin{equation}\label{eq:lab4_elevation_constraint}
+	e_k \geq \alpha \text{exp}\left( -\beta (\lambda_k - \lambda_t)^2\right) \forall k \in \left\lbrace 1,...,N\right\rbrace 
+\end{equation}
 
 \subsection{The continuous model}
 \textit{Answer 10.4.1.1}
@@ -86,41 +93,35 @@ where $ T $ is the sample-time.
 \textit{Printouts of data from relevant experiments (plots).
 Discussion and analysis of the results.
 Answer 10.4.2.6 here.}
-Making the helicopter follow the trajectory consisted of two parts: 
+
+The group's goal was as in the other labs, to make the helicopter follow the optimal trajectory to $ \lambda_f $ as close as possible. Making the helicopter follow the trajectory consisted of two parts: 
 \begin{enumerate}
 	\item Tune the LQ regulator to get a good feedback-gain matrix.
 	\item Find an optimal trajectory the helicopter could follow.
 \end{enumerate}
 
 \subsubsection{Tuning LQ regulator}
-Before the group started testing the optimal trajectory found using the SQP-algorithm, the LQ regulator used to find the feedback-gain matrix $\bm K$ had to be tuned. Since the feedback-loop was generated using both the optimal trajectory for both the state and the input, we used the optimal trajectories in as our reference in the tuning process. However, there is a disadvantage doing this; we don't quite know if the helicopter is even possible to follow these trajectories. Therefore, an optimal procedure would been to generate a trajectory the helicopter had physical possibilities to follow, and use this for tuning. In this way we could've decoupled the tasks of tuning the helicopter and finding an optimal trajectory. However, the group did not have enough time to produce such a tuning process. It could also be argued that this is not necessary, since we have already implemented constraint based on the physical limitations of the helicopter in the optimal trajectory (AND IN THE LQR??). "Men det er god skikk å tune på et annet referanse signal slik helikopteret blir tuned mer generelt"
+Before the group started testing the helicopter's response optimal trajectory found using the SQP-algorithm, the LQ regulator used to find the feedback-gain matrix $\bm K$ had to be tuned. The LQ regulator was exactly the same as the one describe in \cref{kap:task_10_3_LQ_controller}, but now with expanded state and input as described in \cref{eq:lab4_cont_ss}. This means that $ \bm Q $ was now a diagonal matrix of size 6x6, and $ \bm R $ was a diagonal matrix of 2x2. Tuning the LQ regulator is a vital part of achieving as good response. Since the elevation is decoupled from the rest of the states, it should been possible to use the tuning from \cref{sec:lab3_result} and find a good tuning for the elevation (i.e. tuning Q(5,5), Q(6,6) and R(2, 2)). However, in reality the helicopter's state is not decoupled (see \cref{sec:lab4_decoupled}), so to achieve good tuning the group had to tune the whole system again.
 
-Since the group was not able to make a tuning-trajectory for the states and inputs, we used the optimal trajectory with $q_1 = q_2 = 1$ \todo{add cref to cost func}. This gave the optimal trajectories shown in \cref{fig:lab4_opt_trajectory}
+A good rule of thumb is that the LQ regulator should be tuned with an input trajectory that one know the helicopter actually can follow. If the helicopter has an input trajectory that is physical impossible to achieve, the tuning will become hard. Therefore, the group tried to create a moderate input-trajectory which seemed reasonable based on their experience from the lab. However, the task was harder than anticipated, and the group did not have enough time to do this. 
+
+Since the group was not able to make a tuning-trajectory for the states and inputs, an optimal trajectory from solving the optimization problem using $q_1 = q_2 = 1$ in the cost function, was used as a replacement. This gave the optimal trajectories shown in \cref{fig:lab4_opt_trajectory}
 
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=\linewidth]{figures/LAB4_reference_trajectory.png}
-	\caption{lol det ble visst plutselig 3x2 plots - fant en ish-fin workaround for å få det til å funke}
+	\caption{Optimal trajectories using  $q_1 = q_2 = 1$ in the cost function.}
 \end{figure}
 
-In the tuning process we decided to keep R and Q as diagonal matrices. R was set constant equal the identity matrix, i.e. $R = I_2$. The diagonal elements of Q was then changed to get a good-tuned system. Each diagonal entry in Q corresponds to the corresponding stat in \cref{eq:lab4_cont_ss} \todo{REFORMULATE}, so the tuning process was done by tuning state-by-state. 
-
-Since we are interested in following the optimal trajectory for the travel, we started by tuning this state, i.e. changing Q(1, 1) \todo{add ref to matlab script}. The figure below shows the helicopter states to the optimal trajectory for different Q(1, 1) values. As expected, a higher value of Q made the system use more \"fuel\" to follow the travel. Using too large value caused the helicopter's pitch to oscillate quite much, and too low resulted in a bad response.
-
+In the tuning process we decided to keep $ \bm R $ and $ \bm Q $ as diagonal matrices. $ \bm R $ was set constant equal the identity matrix, i.e. $\bm R = \bm I_2$. The diagonal elements of $ \bm Q $ was then changed to get a good tuning. As in \todo{cref lab3 lqr tuning}each diagonal entry in Q corresponds to the corresponding state in \cref{eq:lab4_cont_ss} \todo{REFORMULATE}. This makes the tuning process simpler since a change in an entry $ \bm Q $ has an expected impact on the response. Higher values of $ \bm Q $ results in inputs with larger magnitude, which again gives a faster response. Having too small values on the diagonal of $ \bm Q $ will therefor give a slow response. Having too large values on the diagonal of $ \bm Q $ will also have unwanted effects as the helicopter approaches a less stable tuning. This is shown in \cref{fig:lab4_diff_Q_values} where the low valued $ \bm Q $ gives a slower response, and a higher valued $ \bm Q $ gives an oscillating response (especially for the pitch rate). The oscillations are noticeable in th ereal world as a shaking helicopter.
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=\linewidth]{figures/LAB4_travel_gains.png}
 	\caption{Her er alle verdiene vi brukte, bør nok rydde opp litt.}
+	\label{fig:lab4_diff_Q_values}
 \end{figure}
 
-The group then proceeded to tuning the elevation. Since the helicopter did not have a good response for the elevation (SEE PLOT...) we decided to increase Q(5, 5) to use more \"fuel\" to get a response that followed the optimal elevation...
-\missingfigure{Different Q(5, 5) values}
-
-
-We also tried changing Q(3, 3) to see if we could get a better pitch response.
-\missingfigure{Different Q(3, 3) values}
-
-In the end we chose this configuration as out best tuning: 
+Using the same approach as in \todo{cref lab 3 }the group tuned entry-by-entry in $ \bm Q $. In the end the best tuning was achieved using: 
 \begin{equation}\label{key}
 	\bm Q = \begin{bmatrix}
 		0 & 0 & 0 & 0 & 0 \\
@@ -134,13 +135,15 @@ In the end we chose this configuration as out best tuning:
 		0 & 1
 	\end{bmatrix}
 \end{equation}
-%A signal generator was established to generate signals for the references $p_c$ and $e_c$. This signal generator is shown in \todo{Add ref}. The group chose to use a signal generator for tuning to guarantee a reference signal the helicopter was able to follow. The reason the optimal reference trajectory were not used in the tuning process, was that it was not certain this trajectory could be achieved by the helicopter. Therefore it seemed most reasonable to seperate tuning and optimal trajectory.
+
+This gave the results in \todo{fig best tuning}
+\missingfigure{Best tuning}
 
 \subsubsection{Finding a reasonable trajectory}
 With a good
  
 
-\subsection{Decoupled model}
+\subsection{Decoupled model} \label{sec:lab4_decoupled}
 \textit{Answer 10.4.2.7}
 As states in the problem description, the two last states are completely decoupled from the first four states. Or put in other words, the dynamics describing elevation is completely independent on the pitch and travel. This is of course not the case in reality, and illustrates how ``simple'' are model of the system actually is!
 
