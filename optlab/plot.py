@@ -8,9 +8,10 @@ import optlab
 def export_plot(
         plotname,
         basepath: str = optlab.plot_basepath,
-        pgf = False
+        pgf = False,
+        rect = (0, 0, 1, 1)
     ):
-    plt.tight_layout()
+    plt.tight_layout(rect=rect)
 
     if pgf:
         if plotname[-4:] != ".pgf":
