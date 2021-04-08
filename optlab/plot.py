@@ -98,6 +98,10 @@ def plot_flight(
         if col in optlab.units:
             ax[i].set_ylabel(optlab.units[col])
 
+        # Add ylabel to the optimal if the normal exists. Pitch_opt = Pitch
+        if col[:-4] in optlab.units:
+            ax[i].set_ylabel(optlab.units[col[:-4]])
+
         # Add ylim if it exists
         try:
             if ylims[i] is not None:
