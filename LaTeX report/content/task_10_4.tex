@@ -97,7 +97,11 @@ Before the group started testing the optimal trajectory found using the SQP-algo
 
 Since the group was not able to make a tuning-trajectory for the states and inputs, we used the optimal trajectory with $q_1 = q_2 = 1$ \todo{add cref to cost func}. This gave the optimal trajectories shown in \cref{fig:lab4_opt_trajectory}
 
-\missingfigure{Optimal trajectory}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{figures/LAB4_reference_trajectory.png}
+	\caption{lol det ble visst plutselig 3x2 plots - fant en ish-fin workaround for å få det til å funke}
+\end{figure}
 
 In the tuning process we decided to keep R and Q as diagonal matrices. R was set constant equal the identity matrix, i.e. $R = I_2$. The diagonal elements of Q was then changed to get a good-tuned system. Each diagonal entry in Q corresponds to the corresponding stat in \cref{eq:lab4_cont_ss} \todo{REFORMULATE}, so the tuning process was done by tuning state-by-state. 
 
