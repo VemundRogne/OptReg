@@ -32,8 +32,11 @@ def open_mat(
     if LABn == 2:
         names = optlab.statenames
     
-    if LABn == 3 or LABn == 4:
+    if LABn == 3:
         names = optlab.statenames + optlab.LQRnames
+
+    if LABn == 4:
+        names = optlab.statenames + optlab.LQRnames_with_elevation
 
     mat = scipy.io.loadmat(file_name=file_name)
     mat = mat['ans']

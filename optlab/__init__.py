@@ -14,6 +14,9 @@ units = {
 LQRnames = ["u_opt", "u"]
 LQRnames.extend([statename+"_opt" for statename in statenames])
 
+LQRnames_with_elevation = ["u_opt", "e_opt", "u", "e"]
+LQRnames_with_elevation.extend([statename+"_opt" for statename in statenames])
+
 plot_basepath = "../Latex report/figures/"
 
 def enable_pgf_plots():
