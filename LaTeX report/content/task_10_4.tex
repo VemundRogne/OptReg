@@ -178,8 +178,16 @@ Another solution is not to change the mathematical model of the helicopter at al
 
 
 \subsection{MATLAB and Simulink}
-\textit{Code and diagrams go here}
-
+\subsubsection{MATLAB}
+\lstinputlisting[caption= {MATLAB code for lab 4}, label={lst:lab4_matlab}]{code/lab4.m}
+\subsubsection{Simulink}
+The Simulink diagram for lab 4 is almost exactly like the simulink diagram from lab 3, \cref{fig:lab3_simulink}. The only difference is that the ``LQR Feedback'' is changed to also output the elevation reference. This is shown in \cref{fig:lab4_simulink_lqr}. The outputted elevation reference is then used as input in ``e\_ref'' in the ``Elevation controller'' subsystem in \cref{fig:lab3_simulink}. 
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=1\linewidth, keepaspectratio]{code/lab4_simulink_2}
+	\caption{Expanded ``LQR Feedback'' system in lab 4.}
+	\label{fig:lab4_simulink_lqr}
+\end{figure}
 \subsection{Optional exercise}
 \textit{Which constraints did you add? What was the results? Plots? Discussion?}
 \end{document}

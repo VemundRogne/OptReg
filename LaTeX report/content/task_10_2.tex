@@ -414,13 +414,13 @@ Nevertheless it is possible to verify the control sequence by compensating for t
 \clearpage
 \subsection{MATLAB and Simulink}
 \subsubsection{MATLAB}
-\lstinputlisting[caption= {MATALB code for lab 2}, label={lst:lab2_matlab}]{code/lab2.m}
-\clearpage
+\lstinputlisting[caption= {MATLAB code for lab 2}, label={lst:lab2_matlab}]{code/lab2.m}
 \subsubsection{Simulink}
 \begin{figure}[h]
 	\centering
-	\includegraphics[angle=90, width=0.5\textwidth,height=0.7\textheight]{code/lab2_simulink}
+	\includegraphics[width=1\linewidth, keepaspectratio]{code/lab2_simulink}
 	\caption{Simulink diagram used in lab 2.}
 	\label{fig:lab2_simulink}
 \end{figure}
+\textbf{NOTE:} Some blocks in the Simulink diagram is red. This is only because the the variables are not in the workspace of MATLAB when the screenshot was taken. Running the MATLAB code in \cref{lst:lab2_matlab} will fix this ``error''. This also goes for the other simulink diagrams in this report.
 \end{document}
