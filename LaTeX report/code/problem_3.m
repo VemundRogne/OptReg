@@ -73,7 +73,7 @@ beq(1:size(A0x0,1), :) = A0x0;
 %% Solve QP problem with linear model
 tic
 % x = quadprog(H,f,A,b,Aeq,beq,lb,ub);
-[z,lambda] = quadprog(Q, c,[],[], Aeq, beq, vlb, vub);% hint: quadprog. Type 'doc quadprog' for more info 
+[z,lambda] = quadprog(2*Q, c,[],[], Aeq, beq, vlb, vub);% hint: quadprog. Type 'doc quadprog' for more info 
 t1=toc;
 
 % Calculate objective value

@@ -3,7 +3,7 @@
 % Updated spring 2018, Andreas L. Flten
 
 %% Initialization and model definition
-init05; % Change this to the init file corresponding to your helicopter
+init06; % Change this to the init file corresponding to your helicopter
 
 % Continous time model
 Ac = [0, 1,       0,       0;
@@ -75,7 +75,7 @@ beq(1:size(A0x0,1), :) = A0x0;
 %% Solve QP problem with linear model
 tic
 % x = quadprog(H,f,A,b,Aeq,beq,lb,ub);
-[z,lambda] = quadprog(Q, c,[],[], Aeq, beq, vlb, vub);% hint: quadprog. Type 'doc quadprog' for more info 
+[z,lambda] = quadprog(2*Q, c,[],[], Aeq, beq, vlb, vub);% hint: quadprog. Type 'doc quadprog' for more info 
 t1=toc;
 
 % Calculate objective value
