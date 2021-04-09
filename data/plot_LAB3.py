@@ -39,31 +39,41 @@ def plot_different_R_values():
     ]
     R_tests_labels = ["R=0.01", "R=0.10", "R=1.0", "R=10"]
 
+    fig, ax = plt.subplots(nrows=3, ncols=2, sharex=True)
+    ax = list(ax.flatten())
+
     fig, ax = optlab.plot.plot_comparisons(
         R_tests,
         R_tests_labels,
         ['Travel', 'Travelrate', 'Pitch', 'Pitchrate', 'u'],
         plot_optimal_trajectory=True,
         xlim=[0, 25],
-        legend_loc='right'
+        legend_loc='right',
+        fig=fig,
+        ax=ax,
+        forced_xlabel_loc=[4],
+        legend_ncols=5
     )
 
-    fig.set_size_inches(6.5, 9)
+    fig.set_size_inches(12, 9)
 
     return fig, ax
 
 
-def plot_different_Q_values():
+def plot_different_Q_values(startindex = 0):
     Q_paths, Q_labels = get_Q_metadata()
 
     # This is where we can select different runs to plot
-    Q_paths = select_by_index(Q_paths, [2, 1, 0])
-    Q_labels = select_by_index(Q_labels, [2, 1, 0])
+    Q_paths = select_by_index(Q_paths, list(reversed(range(startindex, startindex+3))))
+    Q_labels = select_by_index(Q_labels, list(reversed(range(startindex, startindex+3))))
 
     Q_tests = [
         optlab.open_mat("LAB3/"+path, LABn=3)
         for path in Q_paths
     ]
+
+    fig, ax = plt.subplots(nrows=3, ncols=2, sharex=True)
+    ax = list(ax.flatten())
 
     fig, ax = optlab.plot.plot_comparisons(
         Q_tests,
@@ -71,10 +81,14 @@ def plot_different_Q_values():
         ['Travel', 'Travelrate', 'Pitch', 'Pitchrate', 'u'],
         plot_optimal_trajectory=True,
         xlim=[0, 25],
-        legend_loc='right'
+        legend_loc='right',
+        fig=fig,
+        ax=ax,
+        forced_xlabel_loc=[4],
+        legend_ncols=5
     )
 
-    fig.set_size_inches(6.5, 9)
+    fig.set_size_inches(12, 9)
 
     return fig, ax
 
@@ -82,10 +96,22 @@ def plot_different_Q_values():
 if __name__ == '__main__':
     #optlab.enable_pgf_plots()
     
-    fig, ax = plot_different_R_values()
-    fig.suptitle("Effect of varying R-values in the LQR regulator")
-    optlab.plot.export_plot("LAB3_R_variations")
+    #fig, ax = plot_different_R_values()
+    #fig.suptitle("Varying R-values in the LQR regulator")
+    #optlab.plot.export_plot("LAB3_R_variations", rect=(0,0.05, 1, 1))
     
     fig, ax = plot_different_Q_values()
-    fig.suptitle("Effect of varying Q-values in the LQR regulator")
-    optlab.plot.export_plot("LAB3_Q_variations")
+    fig.suptitle("Varying the Q-parameter related to travel")
+    optlab.plot.export_plot("LAB3_Q_variations", rect=(0,0.05, 1, 1))
+
+    fig, ax = plot_different_Q_values(startindex=3)
+    fig.suptitle("Varying the Q-paramters related to travelrate")
+    optlab.plot.export_plot("LAB3_Q_variations_travelrate", rect=(0,0.05, 1, 1))
+
+    fig, ax = plot_different_Q_values(startindex=6)
+    fig.suptitle("Varying the Q-paramters related to pitch")
+    optlab.plot.export_plot("LAB3_Q_variations_pitch", rect=(0,0.05, 1, 1))
+
+    fig, ax = plot_different_Q_values(startindex=9)
+    fig.suptitle("Varying the Q-paramters related to pitchrate")
+    optlab.plot.export_plot("LAB3_Q_variations_pitchrate", rect=(0,0.05, 1, 1))

@@ -134,8 +134,13 @@ def plot_flight(
 #    for axis in ax:
 #        axis.legend(loc=legend_loc)
     
-    for i, axis in enumerate(ax):
-        axis.set_title(columns[i])
+    try:
+        for i, axis in enumerate(ax):
+            axis.set_title(columns[i])
+    except IndexError:
+        # This was written to ignore indexerrors when plotting
+        # nxm subplot grids where some subplots remain empty
+        pass
     
     ax[-1].set_xlabel("Time [s]")
 
