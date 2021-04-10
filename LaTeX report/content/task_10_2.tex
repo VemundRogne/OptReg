@@ -59,7 +59,7 @@ The state-space form of the system models two part of the whole system, namely:
 	\item The physics of the helicopter.
 	\item The proportional-derivative controller for the pitch.
 \end{enumerate}
-This is shown in \cref{fig:lab2_system} where the red dotted box shows what we model with the state space model. \todo[inline]{Add ref to the figure in the problem description}
+This is shown in \cref{fig:lab2_system} where the red dotted box shows what we model with the state space model. 
 
 \begin{figure}[h]
 	\centering
@@ -93,12 +93,10 @@ The eigenvalues of the continous model, with $K_{pp} = 0,1 , K_{pd} = 0,4$ are:
 A discretized model is required for generating an optimal trajectory. \textit{[...] continous time models require quite different solution methods} \cite{FossHeirung}
 
 We will discretize the model using the forward Euler method, which is given by:
-\todo[inline]{Do we need to derive forward euler?}
 \begin{equation}\label{eq:lab2_forward_euler}
 	\bm{x}[k + 1] = \bm I \bm x[k] + T\bm{A_c x}[k] + T\bm B_c ,
 \end{equation}
-where $ T $ is the sample-time in the discrete model.\todo
-[inline]{Add reference to linsys slides}
+where $ T $ is the sample-time in the discrete model.
 Reformulating this, we can write:
 \begin{equation}\label{eq:lab2_discrete_system}
 	\bm{x}_{k + 1} = \underbrace{(\bm I + T \bm A_c)}_{\bm A_d} \bm{x}_{k} + \underbrace{T \bm B_c}_{\bm B_d} u_k
@@ -134,7 +132,7 @@ Using the script in \cref{lst:lab2_eigenvalues} the eigenvalues became:
 		\lambda_4 &= 0.55
 	\end{align}
 \end{subequations}
-All eigenvalues fulfills the requirement of \cref{eq:lab2_stab_condition}, which means our system is stable! Since two of the eigenvalues are on the unit circle (i.e. has a value of 1), our system is more specifically marginally stable. More information on this subject can be found \todo{Add cite to wikipedia}.
+All eigenvalues fulfills the requirement of \cref{eq:lab2_stab_condition}, which means our system is stable! Since two of the eigenvalues are on the unit circle (i.e. has a value of 1), our system is marginally stable.
 
 \lstinputlisting[caption= {MATLAB code for calculating eigenvalues for $ \bm A_d $}, label = {lst:lab2_eigenvalues}, language=Matlab]{code/calculate_eigenvals.m}
 
@@ -284,7 +282,7 @@ Performing the multiplication (and abusing notation) shows that:
 		\bm x_n = \bm A_d \bm x_{n-1} + \bm B_d u_{n-1}
 	\end{bmatrix}
 \end{equation}
-\Cref{eq:lab2_system_constraints} describes the system in terms of \cref{eq:lab2_discrete_system} for all timesteps\todo{Again: timesteps illegal?}, and thereby also describes all system constraints for the system.
+\Cref{eq:lab2_system_constraints} describes the system in terms of \cref{eq:lab2_discrete_system} for all timesteps, and thereby also describes all system constraints for the system.
 
 \subsubsection{Defining the open loop optimization problem}
 Combining the cost function described in \cref{sec:lab2_cost_func} and the constraints described in \cref{sec:lab2_constraints} the open loop optimization problem can be defined as: 

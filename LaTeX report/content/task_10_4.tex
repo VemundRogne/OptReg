@@ -12,7 +12,6 @@ and the constraint on the elevation was:
 \end{equation}
 
 \subsection{The continuous model}
-\textit{Answer 10.4.1.1}
 The equation for elevation has been given in the problem description as
 \begin{equation}\label{eq:lab4_elevation}
 	\ddot{e} + K_3K_{ed}\dot{e} + K_3K_{ep}e = K_3K_{ep}e_c
@@ -65,7 +64,6 @@ Expanding the system defined in \cref{eq:lab2_cont_ss} to include \cref{eq:lab4_
 \end{equation}
 
 \subsection{The discretized model}
-\textit{Answer 10.4.1.2}
 Discretizing the continuous system defined in \cref{eq:lab4_cont_ss} was done using the forward Euler method (see \cref{sec:lab2_disc} for more information about this method).
 
 The resulting dicretized system became: 
@@ -110,7 +108,7 @@ Since the group was not able to make a tuning-trajectory for the states and inpu
 	\label{fig:lab4_opt_trajectory}
 \end{figure}
 
-In the tuning process we decided to keep $ \bm R $ and $ \bm Q $ as diagonal matrices. $ \bm R $ was set constant equal the identity matrix, i.e. $\bm R = \bm I_2$. The diagonal elements of $ \bm Q $ was then changed to get a good tuning. As in \todo{cref lab3 lqr tuning}each diagonal entry in Q corresponds to the corresponding state in \cref{eq:lab4_cont_ss} \todo{REFORMULATE}. This makes the tuning process simpler since a change in an entry $ \bm Q $ has an expected impact on the response. Higher values of $ \bm Q $ results in inputs with larger magnitude, which again gives a faster response. Having too small values on the diagonal of $ \bm Q $ will therefor give a slow response. Having too large values on the diagonal of $ \bm Q $ will also have unwanted effects as the helicopter approaches a less stable tuning. This is shown in \cref{fig:lab4_diff_Q_values} where the low valued $ \bm Q $ gives a slower response, and a higher valued $ \bm Q $ gives an oscillating response (especially for the pitch). The oscillations are noticeable in the real world as a shaking helicopter.
+In the tuning process we decided to keep $ \bm R $ and $ \bm Q $ as diagonal matrices. $ \bm R $ was set constant equal the identity matrix, i.e. $\bm R = \bm I_2$. The diagonal elements of $ \bm Q $ was then changed to get a good tuning. As in \todo{cref lab3 lqr tuning}each diagonal entry in Q corresponds to the corresponding state in \cref{eq:lab4_cont_ss}. This makes the tuning process simpler since a change in an entry $ \bm Q $ has an expected impact on the response. Higher values of $ \bm Q $ results in inputs with larger magnitude, which again gives a faster response. Having too small values on the diagonal of $ \bm Q $ will therefor give a slow response. Having too large values on the diagonal of $ \bm Q $ will also have unwanted effects as the helicopter approaches a less stable tuning. This is shown in \cref{fig:lab4_diff_Q_values} where the entry corresponding to the travel response was changed, i.e. Q(1, 1). Changing this entry changes the pitch input, as travel and pitch are directly related. Low values at Q(1, 1) gives a slower response for travel, and higher values at Q(1, 1) gives faster response. Higher values also makes a more oscillating response (especially for the pitch) for the states. The oscillations are noticeable in the real world as a shaking helicopter, and is an unwanted effect.
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=\linewidth]{figures/LAB4_travel_gains.png}
@@ -205,15 +203,6 @@ The obvious solution is to couple the model by making it more realistic. The mod
 
 Another solution is not to change the mathematical model of the helicopter at all, but rather change the regulator for the helicopter. Maybe adding integral-effect in the pitch- and elevation-controller would help decreasing the error? Or maybe other feedback-loop implementations could yield better results? There are many possible solutions to improve the regulation of the helicopter! Using this ``solution'', our optimal solution will still be wrong, but we can reduce the error by using a better regulator. The advantage of this is that we can spend less time making a more exact mathematical model, and rather focus on making a regulator that is more robust for errors. The disadvantage is of course that our optimal trajectories are still wrong.
 
-\subsection{Adding more constraints}
-The group did not have enough time to implement this at the lab, but have discussed afterwards. If any new constraints should be added, the group would add a constraint on the maximum allowed elevation. There is no upper bound on the elevation in this task, and it would be reasonable to add this. There are two reasons for this: 
-\begin{enumerate}
-	\item The real helicopter has bounds on the elevation.
-	\item The helicopter becomes nonlinear far from the linearization point.
-\end{enumerate}
-The first point is obvious: The optimal trajectories should not be able to be physical impossible for the helicopter to reach. This can probably be avoided by tuning $ \alpha  $ and $ \beta $ in the already given constraint in \cref{eq:lab4_elevation_constraint}. The second point is more interesting. When flying far from the linearization point, the helicopter becomes very nonlinear. At these configurations, our model does a bad job at modelling the system. Bounds on the elevation could therefore prevent the helicopter from flying ``too far'' from the linearization point. ``Too far'' in the sense that the model has large errors from the real response.
-
-
 \subsection{MATLAB and Simulink}
 \subsubsection{MATLAB}
 \lstinputlisting[caption= {MATLAB code for lab 4}, label={lst:lab4_matlab}]{code/lab4.m}
@@ -226,5 +215,10 @@ The Simulink diagram for lab 4 is almost exactly like the simulink diagram from 
 	\label{fig:lab4_simulink_lqr}
 \end{figure}
 \subsection{Optional exercise}
-\textit{Which constraints did you add? What was the results? Plots? Discussion?}
+The group did not have enough time to implement this at the lab, but have discussed afterwards. If any new constraints should be added, the group would add a constraint on the maximum allowed elevation. There is no upper bound on the elevation in this task, and it would be reasonable to add this. There are two reasons for this: 
+\begin{enumerate}
+	\item The real helicopter has bounds on the elevation.
+	\item The helicopter becomes nonlinear far from the linearization point.
+\end{enumerate}
+The first point is obvious: The optimal trajectories should not be able to be physical impossible for the helicopter to reach. This can probably be avoided by tuning $ \alpha  $ and $ \beta $ in the already given constraint in \cref{eq:lab4_elevation_constraint}. The second point is more interesting. When flying far from the linearization point, the helicopter becomes very nonlinear. At these configurations, our model does a bad job at modelling the system. Bounds on the elevation could therefore prevent the helicopter from flying ``too far'' from the linearization point. ``Too far'' in the sense that the model has large errors from the real response.
 \end{document}
