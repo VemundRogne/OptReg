@@ -87,44 +87,44 @@ Prioritizing travel has a great effect on the travel - resulting in almost perfe
 Prioritizing travelrate, pitch and pitchrate results in resonses closer to the planned trajectory, but this is not further discussed as travel is the state most important to control - theese experiments were only to show that it would be possble should another state be valuable.
 
 \subsubsection{Possible improvements}
-The group observed that the state never reached the optimal trajectory, even with very high Q-values. The group believes that adding integration to the LQ-regulator would eliminate the stationary- and reduce the dynamic offset.
+The group observed that the state never reached the optimal trajectory, even with very high Q-values. The group believes that adding integration to the LQ-regulator would eliminate the stationary offset between travel and the planned travel trajectory. 
 
-Another improvement is to impose a constraint on the input-use on the advanced control layer. This could either be achieved using a different feedback strategy, or by simply saturating the input. If the simple limiting saturation is chosen then it would make sense to set the optimizatoin layers constraint slightly lower to limit the saturation.
+Another improvement is to impose a constraint on the input-use on the advanced control layer to respect the maximum pitch-setpoint stipulated in the problem description. This could either be achieved using a different feedback strategy, or by simply saturating the input. If the simple limiting saturation is chosen then it would make sense to set the optimizatoin layers constraint slightly lower to limit the saturation.
 
 \subsubsection{Plots}
 
 \begin{figure}[h]
 	\centering
     \includegraphics[width=0.8\linewidth]{figures/LAB3_R_variations.png}
-	\caption{Results of varying R-values wihle keeping Q=diag([1,1,1,1])}
+	\caption{Prioritizing input-usage while keeping Q=diag([1,1,1,1]). This shows a very slight difference between weights. No further experimentation was done because if $u_k = u_k^*$ then that would be the same as the previous exercise.}
 	\label{fig:LAB3_R_variations}
 \end{figure}
 
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.8\linewidth]{figures/LAB3_Q_variations.png}
-	\caption{Results of varying Q-values while keeping $R=1$}
+	\caption{Prioritizing the weight related to travel while keeping $R=1$. This was very effective in reducing offset between travel and the planned trajectory. Unfortunately at heigher gains there is some offset introducted and even then there is still a constant offset. A regulator with integral action would probably eliminate this offset without introducting oscillations.}
 	\label{fig:LAB3_Q_variations_travel}
 \end{figure}
 
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.8\linewidth]{figures/LAB3_Q_variations_travelrate.png}
-	\caption{Results of varying Q-values while keeping $R=1$}
+	\caption{Changing the weight of the travelrate state, $R=1$. This had only a minor effect with small variations in the response.}
 	\label{fig:LAB3_Q_variations_travelrate}
 \end{figure}
 
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.8\linewidth]{figures/LAB3_Q_variations_pitch.png}
-	\caption{Results of varying Q-values while keeping $R=1$}
+	\caption{Changing the weight of the pitch state, $R=1$. This had the effect of getting both pitch, pitch-setpoint and pitchrate closer to the planned trajectory at the expense of travel and travelrate.}
 	\label{fig:LAB3_Q_variations_pitch}
 \end{figure}
 
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.8\linewidth]{figures/LAB3_Q_variations_pitchrate.png}
-	\caption{Results of varying Q-values while keeping $R=1$}
+	\caption{Changing the weight of the pitchrate state, $R=1$. This was quite similar to \cref{fig:LAB3_Q_variations_pitch} but there is less oscillation.}
 	\label{fig:LAB3_Q_variations_pitchrate}
 \end{figure}
 
