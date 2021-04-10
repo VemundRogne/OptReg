@@ -90,10 +90,6 @@ The resulting dicretized system became:
 where $ T $ is the sample-time.
 
 \subsection{Experimental results}
-\textit{Printouts of data from relevant experiments (plots).
-Discussion and analysis of the results.
-Answer 10.4.2.6 here.}
-
 The group's goal was as in the other labs, to make the helicopter follow the optimal trajectory to $ \lambda_f $ as close as possible. Making the helicopter follow the trajectory consisted of two parts: 
 \begin{enumerate}
 	\item Tune the LQ regulator to get a good feedback-gain matrix.
@@ -111,9 +107,10 @@ Since the group was not able to make a tuning-trajectory for the states and inpu
 	\centering
 	\includegraphics[width=\linewidth]{figures/LAB4_reference_trajectory.png}
 	\caption{Optimal trajectories using  $q_1 = q_2 = 1$ in the cost function.}
+	\label{fig:lab4_opt_trajectory}
 \end{figure}
 
-In the tuning process we decided to keep $ \bm R $ and $ \bm Q $ as diagonal matrices. $ \bm R $ was set constant equal the identity matrix, i.e. $\bm R = \bm I_2$. The diagonal elements of $ \bm Q $ was then changed to get a good tuning. As in \todo{cref lab3 lqr tuning}each diagonal entry in Q corresponds to the corresponding state in \cref{eq:lab4_cont_ss} \todo{REFORMULATE}. This makes the tuning process simpler since a change in an entry $ \bm Q $ has an expected impact on the response. Higher values of $ \bm Q $ results in inputs with larger magnitude, which again gives a faster response. Having too small values on the diagonal of $ \bm Q $ will therefor give a slow response. Having too large values on the diagonal of $ \bm Q $ will also have unwanted effects as the helicopter approaches a less stable tuning. This is shown in \cref{fig:lab4_diff_Q_values} where the low valued $ \bm Q $ gives a slower response, and a higher valued $ \bm Q $ gives an oscillating response (especially for the pitch). The oscillations are noticeable in th ereal world as a shaking helicopter.
+In the tuning process we decided to keep $ \bm R $ and $ \bm Q $ as diagonal matrices. $ \bm R $ was set constant equal the identity matrix, i.e. $\bm R = \bm I_2$. The diagonal elements of $ \bm Q $ was then changed to get a good tuning. As in \todo{cref lab3 lqr tuning}each diagonal entry in Q corresponds to the corresponding state in \cref{eq:lab4_cont_ss} \todo{REFORMULATE}. This makes the tuning process simpler since a change in an entry $ \bm Q $ has an expected impact on the response. Higher values of $ \bm Q $ results in inputs with larger magnitude, which again gives a faster response. Having too small values on the diagonal of $ \bm Q $ will therefor give a slow response. Having too large values on the diagonal of $ \bm Q $ will also have unwanted effects as the helicopter approaches a less stable tuning. This is shown in \cref{fig:lab4_diff_Q_values} where the low valued $ \bm Q $ gives a slower response, and a higher valued $ \bm Q $ gives an oscillating response (especially for the pitch). The oscillations are noticeable in the real world as a shaking helicopter.
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=\linewidth]{figures/LAB4_travel_gains.png}
@@ -121,22 +118,14 @@ In the tuning process we decided to keep $ \bm R $ and $ \bm Q $ as diagonal mat
 	\label{fig:lab4_diff_Q_values}
 \end{figure}
 
-
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=\linewidth]{figures/LAB4_elevation_gains.png}
-	\caption{Plot showing the effect of varying the entry in $ \bm Q $ related to elevation. The travel-gain in $ \bm Q $ is 15, while the other values are 1.}
-	\label{fig:lab4_diff_elevation_values}
-\end{figure}
-
 Using the same approach as in \todo{cref lab 3 }the group tuned entry-by-entry in $ \bm Q $. In the end the best tuning was achieved using: 
 \begin{equation}\label{key}
 	\bm Q = \begin{bmatrix}
-		0 & 0 & 0 & 0 & 0 \\
-		0 & 0 & 0 & 0 & 0 \\
-		0 & 0 & 0 & 0 & 0 \\
-		0 & 0 & 0 & 0 & 0 \\
-		0 & 0 & 0 & 0 & 0 \\
+		15 & 0 & 0 & 0 & 0 \\
+		0 & 1 & 0 & 0 & 0 \\
+		0 & 0 & 0.1 & 0 & 0 \\
+		0 & 0 & 0 & 15 & 0 \\
+		0 & 0 & 0 & 0 & 1 \\
 	\end{bmatrix}, 
 	\bm R = \begin{bmatrix}
 		1 & 0 \\ 
@@ -148,9 +137,10 @@ This gave the results in \cref{fig:LAB4_best_tuning}
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=\linewidth]{figures/LAB4_best_tunings.png}
-	\caption{Best tuning}
+	\caption{Best tuning of the LQ regulator in lab 4.}
 	\label{fig:LAB4_best_tuning}
 \end{figure}
+The bump in the optimal trajectory for elevation comes from the constraint defined by \cref{eq:lab4_elevation_constraint}.
 
 \subsubsection{Finding a reasonable trajectory}
 The group had two criterions on what defined a reasonable trajectory:
@@ -158,23 +148,70 @@ The group had two criterions on what defined a reasonable trajectory:
 	\item The trajectory created should be physical possible (or at least close to possible) for the helicopter to achieve.
 	\item The time used to go from $ \lambda_0 $ to $ \lambda_f $ should be as small as possible.
 \end{enumerate}
- 
+The group tested different values for $ q_1 $ and $ q_2 $ in \cref{eq:lab4_cost_func}. In the end, the result shown in \cref{fig:LAB4_best_tuning} fulfilled both these criterions well compared to other configurations, so the group decided that using $ q_1 = q_2 = 1 $ was a fair trajectory. Even though there are some error in the pitch and elevation response
 
 \subsection{Decoupled model} \label{sec:lab4_decoupled}
-\textit{Answer 10.4.2.7}
-As states in the problem description, the two last states are completely decoupled from the first four states. Or put in other words, the dynamics describing elevation is completely independent on the pitch and travel. This is of course not the case in reality, and illustrates how ``simple'' are model of the system actually is!
+As states in the problem description, the two last states are completely decoupled from the first four states. Or put in other words, the dynamics describing elevation is completely independent on the pitch and travel. This is of course not the case in reality, and illustrates how simplicity of the model!
 
-It becomes quite obvious from the plots \todo{Fin plots that shows this} that the elevation response is heavily coupled with both pitch and travel. Plot \todo{add cref} shows this as when the pitch is changed at time \todo{add time point}, the elevation also changes when it in fact should have been still as calculated in the optimal trajectory. Also there is a lot of rotational forces that have not been considered in the model. E.g. the travel rate $ r $ will create a centripetal force going along the helicopter arm, and point inwards to the origin of the arm. If the helicopter arm is not completely horizontal, this centripetal force will have a component in the direction of the elevation. The main point is that our model is a very simplified version of the real physics of the helicopter. In reality the helicopter is a complex system, which we can never define 100 \% exact with a mathematical formulation. It is impossible.
+%It becomes quite obvious from the plots \todo{Fin plots that shows this} that the elevation response is heavily coupled with both pitch and travel. Plot \todo{add cref} shows this as when the pitch is changed at time \todo{add time point}, the elevation also changes when it in fact should have been still as calculated in the optimal trajectory. 
+A simple force analysis will show that the states are not decoupled as described in the model. Assuming the helicopter is horizontal and the pitch is \textbf{not} zero, the force from the helicopter rotors will have two components. One horizontal and one vertical. This is shown in \cref{fig:lab4_forces}. A change in pitch will change the vertical component of the rotor forces, and thereby also affecting the elevation.
+\begin{figure}
+	\centering
+	\begin{tikzpicture}
+		\draw [thick] (0, 0) -- (3, 3);
+		\draw [fill=black] (0, 0) circle [radius=0.10];
+		\node [below right] at (0, 0) {Rotor 1};
+		\draw [fill=black] (3, 3) circle [radius=0.10];
+		\node [below right] at (3, 3) {Rotor 2};
+		
+		\draw [->, red] (0, 0) -- (-1, 1);
+		\node [above, red] at (-1, 1) {$ F_1 $};
+		\draw[->, dashed, blue] (0,0) --(0, 1);
+		\node [above, blue] at (0, 1) {$ F_{1y} $};
+		\draw[<-, dashed, violet] (0,0) --(-1, 0);
+		\node [left, violet] at (-1, 0) {$ F_{1x} $};
+		
+		\draw [->, red] (3, 3) -- (2, 4);
+		\node [above, red] at (2, 4) {$ F_2 $};
+		\draw[->, dashed, blue] (3,3) --(3, 4);
+		\node [above, blue] at (3, 4) {$ F_{2y} $};
+		\draw[<-, dashed, violet] (3,3) --(2, 3);
+		\node [left, violet] at (2, 3) {$ F_{2x} $};
+		
+		\draw[dashed] (1.5, 1.5) -- (2.5, 1.5);
+		
+		\coordinate (a) at (2, 1.5);
+		\coordinate (b) at (1.5, 1.5);
+		\coordinate (c) at (2, 2);
+		\pic["$p$", draw=orange, <->, angle eccentricity=1.2, angle radius=1cm] {angle = a--b--c};
+	
+	\end{tikzpicture}
+	\caption{Force diagram of a horizontal helicopter with pitch not zero} \label{fig:lab4_forces}
+\end{figure}
+Also there is a lot of rotational forces that have not been considered in the model. E.g. the travel rate $ r $ will create a centripetal force going along the helicopter arm, and point inwards to the origin of the arm. If the helicopter arm is not completely horizontal, this centripetal force will have a component in the direction of the elevation. The main point is that our model is a very simplified version of the real physics of the helicopter. In reality the helicopter is a complex system, which we can never define 100 \% exact with a mathematical formulation.
 
-The effect this has on our optimal trajectory, is that our solver considers elevation as a system that is completely independent on the other states. The implication of this is that our optimal trajectory for elevation is the same, no matter how the trajectory for pitch and travel looks like. \todo[inline]{Is this statement correct? Test this} This can of course be turned the other way around, as the optimal pitch- and travel-trajectory is also independent on the optimal elevation trajectory. The optimal trajectories are ``wrong'', since the elevation is clearly not independent on the other states! Our helicopter will therefor have a hard time following the optimal trajectories as they are not a good representation of the reality.
+The effect this has on our optimal trajectory, is that our solver considers elevation as a system that is completely independent on the other states. This can of course be turned the other way around, as the optimal pitch- and travel-trajectory are also independent on the optimal elevation trajectory. The optimal trajectories are therefore ``wrong'', since the elevation is clearly not independent on the other states! In practice the decoupled model will always model the elevation for a helicopter that is horizontal and still. I.e. it will always model where the rotor forces points directly upwards. Therefore, the further away the helicopter is from the still horizontal state, the larger the error due to the decoupled model becomes. 
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{figures/LAB4_elevation_gains.png}
+	\caption{Plot showing the effect of varying the entry in $ \bm Q $ related to elevation. The travel-gain in $ \bm Q $ is 15, while the other values are 1.}
+	\label{fig:lab4_diff_elevation_values}
+\end{figure}
 
 \subsubsection{Possible solutions}
 There are no correct solution to this problem, as we will never be able to describe the real-world system exact with mathematical formulations. There are however, some ``solutions'' that will improve our system and reduce the errors that arises from our decoupled model.
 
-The obvious solution is to couple the model by making it more realistic. There are forces that we can include in our model to make it more accurate. These are for instance the centripetal force mentioned above, friction forces, forces caused by the ground effect, and so on. Of course we can only add simplified equations for these forces, but it would nevertheless increase the accuracy of our model! We will never be able to take into account all forces, and many forces are actually impossible to model mathematically. Therefore we need to identify the forces that has the biggest impact on the error in our model. This is a hard task in itself and can be considered a downside of this approach. Another downside is that our model will quickly become complex and hard to understand. However, the group thinks that it would not be to much work to take into account the most obvious rotational forces, which could possibly cause a big improvement in the optimal solution.
+The obvious solution is to couple the model by making it more realistic. The model is derived from a linearization around the horizontal state of the helicopter, while the real helicopter is far from linear. The further away it goes from the horizontal state, the more nonlinear it becomes. There are forces that we can include in our model to make it more accurate. These are for instance the centripetal force mentioned above, friction forces, forces caused by the ground effect, and so on. Of course we can only add simplified equations for these forces, but it would nevertheless increase the accuracy of our model! We will never be able to take into account all forces and nonlinearities, and many forces are actually impossible to model mathematically. Therefore we need to identify the forces that has the biggest impact on the error in our model. This is a hard task in itself and can be considered a downside of this approach. Another downside is that our model will quickly become complex and hard to understand. However, the group thinks that it would not be to much work to take into account the most obvious rotational forces, which could possibly cause a big improvement in the optimal solution.
 
 Another solution is not to change the mathematical model of the helicopter at all, but rather change the regulator for the helicopter. Maybe adding integral-effect in the pitch- and elevation-controller would help decreasing the error? Or maybe other feedback-loop implementations could yield better results? There are many possible solutions to improve the regulation of the helicopter! Using this ``solution'', our optimal solution will still be wrong, but we can reduce the error by using a better regulator. The advantage of this is that we can spend less time making a more exact mathematical model, and rather focus on making a regulator that is more robust for errors. The disadvantage is of course that our optimal trajectories are still wrong.
 
+\subsection{Adding more constraints}
+The group did not have enough time to implement this at the lab, but have discussed afterwards. If any new constraints should be added, the group would add a constraint on the maximum allowed elevation. There is no upper bound on the elevation in this task, and it would be reasonable to add this. There are two reasons for this: 
+\begin{enumerate}
+	\item The real helicopter has bounds on the elevation.
+	\item The helicopter becomes nonlinear far from the linearization point.
+\end{enumerate}
+The first point is obvious: The optimal trajectories should not be able to be physical impossible for the helicopter to reach. This can probably be avoided by tuning $ \alpha  $ and $ \beta $ in the already given constraint in \cref{eq:lab4_elevation_constraint}. The second point is more interesting. When flying far from the linearization point, the helicopter becomes very nonlinear. At these configurations, our model does a bad job at modelling the system. Bounds on the elevation could therefore prevent the helicopter from flying ``too far'' from the linearization point. ``Too far'' in the sense that the model has large errors from the real response.
 
 
 \subsection{MATLAB and Simulink}
