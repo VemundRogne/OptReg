@@ -104,11 +104,11 @@ The group's goal was as in the other labs, to make the helicopter follow the opt
 \end{enumerate}
 
 \subsubsection{Tuning LQ regulator}
-Before the group started testing the helicopter's response optimal trajectory found using the SQP-algorithm, the LQ regulator used to find the feedback-gain matrix $\bm K$ had to be tuned.
+Before the group started testing the helicopter's response optimal trajectory found using the SQP-algorithm, the LQ regulator used to find the feedback-gain matrix $\bm K$ had to be tuned. \todo{Jeg forstår ikke denne setningen}
 
 Tuning the LQ regulator is a vital part of achieving as good response. Since the elevation is decoupled from the rest of the states, it should been possible to use the tuning from \cref{sec:lab3_result} and find a good tuning for the elevation (i.e. tuning Q(5,5), Q(6,6) and R(2, 2)). However, in reality the helicopter's state is not decoupled (see \cref{sec:lab4_decoupled}), so to achieve good tuning the group had to tune the whole system again.
 
-A good rule of thumb is that the LQ regulator should be tuned with an input trajectory that one know the helicopter actually can follow. If the helicopter has an input trajectory that is physical impossible to achieve, the tuning will become hard. Therefore, the group tried to create a moderate input-trajectory which seemed reasonable based on their experience from the lab. However, the task was harder than anticipated, and the group did not have enough time to do this. 
+A good rule of thumb is that the LQ regulator should be tuned with an input trajectory that one know the helicopter actually can follow. If the helicopter has an input trajectory that is physical impossible to achieve, the tuning will become hard. \todo{vanskelig formulert. Kanksje: It is hard to tune a regulator with an input trajectory that is physcically impossible to acheive} Therefore, the group tried to create a moderate input-trajectory which seemed reasonable based on their experience from the lab. However, the task was harder than anticipated, and the group did not have enough time to do this. 
 
 Since the group was not able to make a tuning-trajectory for the states and inputs, an optimal trajectory from solving the optimization problem using $q_1 = q_2 = 1$ in the cost function, was used as a replacement. This gave the optimal trajectories shown in \cref{fig:lab4_opt_trajectory}
 
@@ -119,7 +119,7 @@ Since the group was not able to make a tuning-trajectory for the states and inpu
 	\label{fig:lab4_opt_trajectory}
 \end{figure}
 
-In the tuning process we decided to keep $ \bm R $ and $ \bm Q $ as diagonal matrices. $ \bm R $ was set constant equal the identity matrix, i.e. $\bm R = \bm I_2$. The diagonal elements of $ \bm Q $ was then changed to get a good tuning. As in \todo{cref lab3 lqr tuning}each diagonal entry in Q corresponds to the corresponding state in \cref{eq:lab4_cont_ss}. This makes the tuning process simpler since a change in an entry $ \bm Q $ has an expected impact on the response. Higher values of $ \bm Q $ results in inputs with larger magnitude, which again gives a faster response. Having too small values on the diagonal of $ \bm Q $ will therefor give a slow response. Having too large values on the diagonal of $ \bm Q $ will also have unwanted effects as the helicopter approaches a less stable tuning. This is shown in \cref{fig:lab4_diff_Q_values} where the entry corresponding to the travel response was changed, i.e. Q(1, 1). Changing this entry changes the pitch input, as travel and pitch are directly related. Low values at Q(1, 1) gives a slower response for travel, and higher values at Q(1, 1) gives faster response. Higher values also makes a more oscillating response (especially for the pitch) for the states. The oscillations are noticeable in the real world as a shaking helicopter, and is an unwanted effect.
+In the tuning process we decided to keep $ \bm R $ and $ \bm Q $ as diagonal matrices. $ \bm R $ was set constant equal the identity matrix, i.e. $\bm R = \bm I_2$. The diagonal elements of $ \bm Q $ was then changed to get a good tuning. As in \todo{cref lab3 lqr tuning}each diagonal entry in Q corresponds to the corresponding state in \cref{eq:lab4_cont_ss}. This makes the tuning process simpler since a change in an entry $ \bm Q $ has an expected impact on the response. Higher values of $ \bm Q $ results in inputs with larger magnitude, which again gives a faster response. Having too small values on the diagonal of $ \bm Q $ will therefor give a slow response. Having too large values on the diagonal of $ \bm Q $ will also have unwanted effects as the helicopter approaches a less stable tuning. This is shown in \cref{fig:lab4_diff_Q_values} where the entry corresponding to the travel response was changed, i.e. Q(1, 1). Changing this entry changes the pitch input, as travel and pitch are directly related. Low values at Q(1, 1) gives a slower response for travel, and higher values at Q(1, 1) gives faster response. Higher values also makes a more oscillating response (especially for the pitch) for the states. The oscillations are noticeable in the real world as a shaking helicopter, and is an unwanted effect. \todo{Kanskje litt langt avsnitt, jeg faller ihvertfall fort av. Typisk leser de fleste kun en eller to setninger per avsnitt (ihvertfall når det skumleses) - da er det viktig å splitte opp og få frem det viktigeste først}
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=\linewidth]{figures/LAB4_travel_gains.png}
@@ -151,7 +151,7 @@ This gave the results in \cref{fig:LAB4_best_tuning}
 	\caption{Best tuning of the LQ regulator in lab 4.}
 	\label{fig:LAB4_best_tuning}
 \end{figure}
-The bump in the optimal trajectory for elevation comes from the constraint defined by \cref{eq:lab4_elevation_constraint}.
+The bump in the optimal trajectory for elevation comes from the constraint defined by \cref{eq:lab4_elevation_constraint}. \todo{Kanskje heller nevne dette sammen med reference trajectory plottet. \cref{fig:lab4_opt_trajectory}}
 
 \subsubsection{Finding a reasonable trajectory}
 The group had two criterions on what defined a reasonable trajectory:
