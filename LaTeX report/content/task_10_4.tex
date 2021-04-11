@@ -104,9 +104,6 @@ The group's goal was as in the other labs, to make the helicopter follow the opt
 \end{enumerate}
 
 \subsubsection{Tuning LQ regulator}
-%Before the group started testing the helicopter's response optimal trajectory found using the SQP-algorithm, the LQ regulator used to find the feedback-gain matrix $\bm K$ had to be tuned. 
-\todo{Jeg forstår ikke denne setningen. EDIT: Jeg fjernet den, synes ikke den var nyttig}
-
 Tuning the LQ regulator is a vital part of achieving as good response. Since the elevation is decoupled from the rest of the states, it should been possible to use the tuning from \cref{sec:lab3_result} and find a good tuning for the elevation (i.e. tuning Q(5,5), Q(6,6) and R(2, 2)). However, in reality the helicopter's state is not decoupled (see \cref{sec:lab4_decoupled}), so to achieve good tuning the group had to tune the whole system again.
 
 A good rule of thumb is that the LQ regulator should be tuned with an input trajectory that one know the helicopter actually can follow. It is hard to tune a regulator with an input trajectory that is physically impossible to achieve. Therefore, the group tried to create a moderate input-trajectory which seemed reasonable based on their experience from the lab. However, the task was harder than anticipated, and the group did not have enough time to do this. 
@@ -145,11 +142,12 @@ As elevation was added to the model, the group also tested the effect of changin
 Using the same approach as in \cref{sec:lab3}, the group tuned entry-by-entry in $ \bm Q $. In the end the best tuning was achieved using: 
 \begin{equation}\label{key}
 	\bm Q = \begin{bmatrix}
-		15 & 0 & 0 & 0 & 0 \\
-		0 & 1 & 0 & 0 & 0 \\
-		0 & 0 & 0.1 & 0 & 0 \\
-		0 & 0 & 0 & 15 & 0 \\
-		0 & 0 & 0 & 0 & 1 \\
+		15 & 0 & 0 & 0 & 0 & 0	\\
+		0 & 1 & 0 & 0 & 0 	& 0\\
+		0 & 0 & 0.1 & 0 & 0& 0 \\
+		0 & 0 & 0 & 1 & 0 & 0	\\
+		0 & 0 & 0 & 0 & 15 	& 0\\
+		0 & 0 & 0 & 0 & 0 	& 1\\
 	\end{bmatrix}, 
 	\bm R = \begin{bmatrix}
 		1 & 0 \\ 
