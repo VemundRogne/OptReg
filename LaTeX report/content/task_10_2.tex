@@ -301,8 +301,6 @@ It is now easy to compare this to the QP formulation given in \cref{eq:lab2_quad
 \textbf{NB:} that the variable names are not exactly the same in the code as in the sections above, but the procedure is the same.
 
 \subsection{The weights of the optimization problem}
-\textit{Try using the values 0.1, 1 and 10 as weights q. Plot the manipulated variable and the output. Comment the results with respect to the different weights chosen.}
-
 $ \bm Q $ and $ r $ in \cref{eq:lab2_LQR} are typically called weight-matrices. Their relative values reflect how the LQ regulator prioritize the objectives (the state and the input) relative ot each other. In this problem, $ \bm Q $ is kept constant and the group changed the value of $ r $ (or $ q $ as it is called in the problem description). Increasing the value of $ q $ means that we are placing a higher cost of input - reducing the input usage. In other words, a smaller $ q $ will make the ``fuel'' (or input) expensive. 
 %This will in turn mean that the cost of deviation in $\lambda$ is, in relation to the input, cheaper. 
 The result is lower input usage and a slower response. This is exactly what is seen in \cref{fig:lab2_optimalu}.
@@ -317,8 +315,6 @@ The result is lower input usage and a slower response. This is exactly what is s
 \Cref{fig:lab2_optimalu} also shows how the constraints work in practice. Studying the plot of $ u $, we can see that no matter how low $ q $ is, the input never goes beyond the specified range of $ \pm\frac{30}{180} \pi $.
 
 \subsection{The objective function}
-\textit{Furthermore, discuss the objective function (15) (in the lab assignment text) in particular the term $(\lambda_i-\lambda_f )^2$. For instance, could any unwanted effects arise from steering the helicopter to $\lambda =\lambda_f$ with this objective function?}
-
 The term $(\lambda_i-\lambda_f )^2$ in \cref{eq:lab2_start_cost_func} may cause problems if it becomes too large compared to the term $ q \cdot u^2 $. What is meant by ``too large'' is that the solution will actually never reach $ \lambda_f $ in the given time horizon, because it is theoretically impossible due to the problem constraints. \Cref{fig:lab2_too_large} shows this. This is the solution of the optimization problem when the group used $ \lambda_0 = 40\pi $. It shows that when the error term for the travel is too large, the helicopter will never reach $ \lambda_f $ no matter what. A direct consequence of this is that the helicopter will never stop the rotation before the time horizon ends.
 \begin{figure}[h]
 	\centering
