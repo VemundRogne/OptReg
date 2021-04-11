@@ -76,16 +76,18 @@ Implementing MPC requires a system model, cost function, current state and input
 One could make a Matlab function that the simulink model uses at every timestep. The input to this function is the current state (either measured or estimated), while the output is connected to the pitch-regulator. The function itself has a model of the system as well as the cost function - with the state from the system the optimalization problem can be solved and the first system-input is returned to the simulink model. 
 
 \subsubsection{Advantages of MPC}
-The biggest advantage of MPC compared to the linear state feedback introduced here is that MPC generates a new optimal trajectory that is possible to achieve - this is very imporant.
+The biggest advantage of MPC compared to the linear state feedback introduced here, is that MPC generates a new optimal trajectory that is more realistic for the helicopter to achieve. Since the optimal trajectory is recalculated based on the current state, the helicopter's response will achieve smaller errors compared to the optimal trajectory. 
 
-Imagine a situation where the helicopter needs to fly below some obstacle. A deviation in elevation that would cause a collision with the obstacle might not be corrected before travel reaches the obstacle - MPC would slow down travel enough to have a trajectory that is possible to achieve.
+%Imagine a situation where the helicopter needs to fly below some obstacle. A deviation in elevation that would cause a collision with the obstacle might not be corrected before travel reaches the obstacle - MPC would slow down travel enough to have a trajectory that is possible to achieve.
+
+Another advantage is that MPC allows for feedback with explicitly defined constraints. This is a more intuitive way of keeping the helicopter stable and within the wanted working-range, compared to looking at eigenvalues of the system matrix with LQR.
 
 \subsubsection{Disadvantages of MPC}
-The biggest disadvantage to MPC is complexity and computation time - in a control system there are hard deadlines and if the optimalization problem has not been solved in that deadline the system has a problem.
+The biggest disadvantage to MPC is complexity and computation time - in a control system there are hard deadlines and if the optimalization problem has not been solved within that deadline, the system has a problem.
 
-First of all the problem must be simple enough or optimized enough to solve at every timestep, else the problem must be simplified, optimized or the timestep must be increased. The time to solve a problem can also vary, which makes this issue more complex.
+First of all the problem must be simple enough or optimized enough to solve at every timestep. If this is not achievable the problem must be simplified/optimized or the timestep must be increased. The time to solve a problem can also vary, which makes this issue more complex.
 
-Another issue is \textbf{existance of solutions} must be guaranteed for all situations. It is possible to have problems that have solutions in some state and reference values, while being undefined for others. This could cause the helicopter to freeze mid-air because there was no solution.
+Another issue is \textbf{existence of solutions} must be guaranteed for all situations. It is possible to have problems that have solutions in some configurations, while being undefined for others. Our helicopter is far from perfect, and our model is quite simple. These imperfections may cause the helicopter's configuration to go outside the defined constraints. This could cause the helicopter to freeze mid-air because there was no solution. If these border cases was not taken care of during implementation, this could be fatal.
 
 \subsubsection{Modified Control Hierarchy with MPC}
 

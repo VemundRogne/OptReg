@@ -17,7 +17,7 @@ The state-vector, $\bm x$ is defined as:
 \end{equation}
 where $\lambda$ is travel, $r$ is the travel rate, $p$ is pitch and $\dot{p}$ is pitch rate.
 
-The dynamic equations for the system was given in the problem description \cite{ProblemDesc} \todo{Add ref to page and paper}. These following equations were given:
+The dynamic equations for the system was given in the problem description \cite{ProblemDesc}. These following equations were given:
 \begin{subequations} \label{eq:lab2_states_eq}
 	\begin{align}
 		\dot \lambda &= r \\
@@ -68,25 +68,25 @@ This is shown in \cref{fig:lab2_system} where the red dotted box shows what we m
 	\label{fig:lab2_system}
 \end{figure}
 
-This becomes clear studying the equations in \cref{eq:lab2_states_eq}. They describe the helicopters physics for all states except elevation and elevation rate. $ \lambda $ and $ r $ is dependent on the helicopters pitch, $ p $. $ p $ and $ \dot p  $ is however dependent on the voltage difference, $ V_d $. The voltage difference is the output of the PD-controller for controlling the pitch\todo{Should we add acronym list?}. 
+This becomes clear studying the equations in \cref{eq:lab2_states_eq}. They describe the helicopters physics for all states except elevation and elevation rate. $ \lambda $ and $ r $ is dependent on the helicopters pitch, $ p $. $ p $ and $ \dot p  $ is however dependent on the voltage difference, $ V_d $. The voltage difference is the output of the PD-controller for controlling the pitch. 
 
 To summarize, this means that our state space model describes the helicopter's physics through the dynamic equations for $ \lambda $, $ r $, $ p $ and $ \dot p $, while the equation of $ V_d $ describes the PD-controller used to control the pitch angle. In total our state-space model is modelling both the helicopter and the PD controller for pitch.
 
 
-\subsubsection{Stability and eigenvalues}
-The properties of this system is dependent on physical constants ($l_a, J_t, ...$) and control parameters ($K_{pp}, K_{pd}$).
-
-Symbolic expressions in Matlab shows that the eigenvalues of A are:
-\begin{equation}
-	\lambda = \pm \frac{1}{2} \left( \sqrt{-K_1 (-K_1 K_{pd}^2 + 4  K_{pp})} - K_1  K_{pd} \right)
-\end{equation}
-
-The eigenvalues of the continous model, with $K_{pp} = 0,1 , K_{pd} = 0,4$ are:
-\begin{equation}\label{eq:lab2_ss_c_eigenvalues_example}
-	\begin{bmatrix}
-		0 \\ 0 \\ -0.26 + 0.24i \\ -0.26 - 0.24 \\
-	\end{bmatrix}
-\end{equation}
+%\subsubsection{Stability and eigenvalues}
+%The properties of this system is dependent on physical constants ($l_a, J_t, ...$) and control parameters ($K_{pp}, K_{pd}$).
+%
+%Symbolic expressions in Matlab shows that the eigenvalues of A are:
+%\begin{equation}
+%	\lambda = \pm \frac{1}{2} \left( \sqrt{-K_1 (-K_1 K_{pd}^2 + 4  K_{pp})} - K_1  K_{pd} \right)
+%\end{equation}
+%
+%The eigenvalues of the continous model, with $K_{pp} = 0,1 , K_{pd} = 0,4$ are:
+%\begin{equation}\label{eq:lab2_ss_c_eigenvalues_example}
+%	\begin{bmatrix}
+%		0 \\ 0 \\ -0.26 + 0.24i \\ -0.26 - 0.24 \\
+%	\end{bmatrix}
+%\end{equation}
 
 % ------------------- DISCRETIZING THE MODEL ------------------------
 \subsection{Discretizing the continous time model} \label{sec:lab2_disc}
