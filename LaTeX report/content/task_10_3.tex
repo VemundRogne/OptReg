@@ -80,7 +80,7 @@ The biggest advantage of MPC compared to the linear state feedback introduced he
 
 %Imagine a situation where the helicopter needs to fly below some obstacle. A deviation in elevation that would cause a collision with the obstacle might not be corrected before travel reaches the obstacle - MPC would slow down travel enough to have a trajectory that is possible to achieve.
 
-Another advantage is that MPC allows for feedback with explicitly defined constraints. This is a more intuitive way of keeping the helicopter stable and within the wanted working-range, compared to looking at eigenvalues of the system matrix with LQR.
+Another advantage is that MPC allows for feedback with explicitly defined constraints. This is a more intuitive way of keeping the helicopter stable and within the wanted working-range, compared to looking at eigenvalues of the system matrix with linear state feedback.
 
 \subsubsection{Disadvantages of MPC}
 The biggest disadvantage to MPC is complexity and computation time - in a control system there are hard deadlines and if the optimalization problem has not been solved within that deadline, the system has a problem.
@@ -94,6 +94,7 @@ Another issue is \textbf{existence of solutions} must be guaranteed for all situ
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.7\linewidth]{content/MPC control hierarchy.png}
+	\caption{The control hierarchy would look like this using MPC.}
 \end{figure}
 
 \subsection{Experimental results}\label{sec:lab3_result}
