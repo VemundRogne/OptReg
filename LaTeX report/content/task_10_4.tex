@@ -108,7 +108,7 @@ Tuning the LQ regulator is a vital part of achieving as good response. Since the
 
 A good rule of thumb is that the LQ regulator should be tuned with an input trajectory that one know the helicopter actually can follow. It is hard to tune a regulator with an input trajectory that is physically impossible to achieve. Therefore, the group tried to create a moderate input-trajectory which seemed reasonable based on their experience from the lab. However, the task was harder than anticipated, and the group did not have enough time to do this. 
 
-Since the group was not able to make a tuning-trajectory for the states and inputs, an optimal trajectory from solving the optimization problem using $q_1 = q_2 = 1$ in the cost function, was used as a replacement. This gave the optimal trajectories shown in \cref{fig:lab4_opt_trajectory}. The bump in the optimal trajectory for elevation comes from the constraint defined by \cref{eq:lab4_elevation_constraint}. \todo{Kanskje heller nevne dette sammen med reference trajectory plottet. \cref{fig:lab4_opt_trajectory}. EDIT: DONE}
+Since the group was not able to make a tuning-trajectory for the states and inputs, an optimal trajectory from solving the optimization problem using $q_1 = q_2 = 1$ in the cost function, was used as a replacement. This gave the optimal trajectories shown in \cref{fig:lab4_opt_trajectory}. The bump in the optimal trajectory for elevation comes from the constraint defined by \cref{eq:lab4_elevation_constraint}. 
 
 \begin{figure}[h]
 	\centering
@@ -118,7 +118,7 @@ Since the group was not able to make a tuning-trajectory for the states and inpu
 \end{figure}
 
 In the tuning process we decided to keep $ \bm R $ and $ \bm Q $ as diagonal matrices. $ \bm R $ was set constant equal the identity matrix, i.e. $\bm R = \bm I_2$. The diagonal elements of $ \bm Q $ was then changed to get a good tuning. 
-The tuning process with the new system, was based on the exact same principles as the tuning process in \cref{sec:lab3}: Each diagonal entry of $ \bm Q $ and $ \bm R $ decides how much the corresponding response of the state/input shall be penalized. Larger values in an entry for $ \bm Q $ gives faster response (or equivalently; uses more input). Too large values gives unwanted effects as oscillations. \todo{EDIT: Dette er nytt. OK?}
+The tuning process with the new system, was based on the exact same principles as the tuning process in \cref{sec:lab3}: Each diagonal entry of $ \bm Q $ and $ \bm R $ decides how much the corresponding response of the state/input shall be penalized. Larger values in an entry for $ \bm Q $ gives faster response (or equivalently; uses more input). Too large values gives unwanted effects as oscillations. 
 %As in each diagonal entry in Q corresponds to the corresponding state in \cref{eq:lab4_cont_ss}. This makes the tuning process simpler since a change in an entry $ \bm Q $ has an expected impact on the response. Higher values of $ \bm Q $ results in inputs with larger magnitude, which again gives a faster response. Having too small values on the diagonal of $ \bm Q $ will therefor give a slow response. Having too large values on the diagonal of $ \bm Q $ will also have unwanted effects as the helicopter approaches a less stable tuning. 
 This is shown in \cref{fig:lab4_diff_Q_values} where the entry corresponding to the travel response was changed, i.e. Q(1, 1). Low values at Q(1, 1) gives a slower response for travel, and higher values at Q(1, 1) gives faster response. Too high values gives oscillations in pitch and pitch rate. The oscillations are noticeable in the real world as a shaking helicopter, and is an unwanted effect. 
 %\todo{Kanskje litt langt avsnitt, jeg faller ihvertfall fort av. Typisk leser de fleste kun en eller to setninger per avsnitt (ihvertfall når det skumleses) - da er det viktig å splitte opp og få frem det viktigeste først}
@@ -129,15 +129,13 @@ This is shown in \cref{fig:lab4_diff_Q_values} where the entry corresponding to 
 	\label{fig:lab4_diff_Q_values}
 \end{figure}
 
-As elevation was added to the model, the group also tested the effect of changing the weights for the elevation. This is shown in \cref{fig:lab4_diff_elevation_values}. Prioritizing elevation by increasing Q(5, 5) gave, as expected, a faster elevation-response. \todo{EDIT: La til dette, hva synes du?}
+As elevation was added to the model, the group also tested the effect of changing the weights for the elevation. This is shown in \cref{fig:lab4_diff_elevation_values}. Prioritizing elevation by increasing Q(5, 5) gave, as expected, a better elevation-response.
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=\linewidth]{figures/LAB4_elevation_gains.png}
 	\caption{Plot showing the effect of varying the entry in $ \bm Q $ related to elevation. The travel-gain in $ \bm Q $ is 15, while the other values are 1.}
 	\label{fig:lab4_diff_elevation_values}
 \end{figure}
-
-\todo[inline]{Plottet som viser tuning av elevation er helt borte, langt nede i teksten. Kanskje nice å skrive om den også? SVAR: Hva skal jeg skrive om her? Jeg fjernet det fordi jeg ikke klarte å skrive noe relevant om det...}
 
 Using the same approach as in \cref{sec:lab3}, the group tuned entry-by-entry in $ \bm Q $. In the end the best tuning was achieved using: 
 \begin{equation}\label{key}
