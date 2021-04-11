@@ -2,16 +2,10 @@
 
 \begin{document}
 \section{10.4 - Optimal Control of Pitch/Travel and Elevation with Feedback}
-In the previous labs the elevation has been disregarded, and assumed to be zero. In this lab, elevation is not disregarded, and the group had to calculate an optimal trajectory for the elevation as well. The criteria to be minimized was
-\begin{equation}\label{eq:lab4_cost_func}
-	\phi = \sum_{i=0}^{N-1} (\lambda_{i + 1} - \lambda_f)^{2} + q_1 p_{ci}^2 + q_2 e_{ci} ^2
-\end{equation}
-and the constraint on the elevation was:
-\begin{equation}\label{eq:lab4_elevation_constraint}
-	e_k \geq \alpha \text{exp}\left( -\beta (\lambda_k - \lambda_t)^2\right) \forall k \in \left\lbrace 1,...,N\right\rbrace 
-\end{equation}
+In the previous labs the elevation has been disregarded, and assumed to be zero. In this lab, elevation is not disregarded, and the group had to calculate an optimal trajectory for the elevation as well.
 
-\subsection{The continuous model}
+\subsection{Modeling the helicopter with elevation}
+\subsubsection{Continous model}
 The equation for elevation has been given in the problem description as
 \begin{equation}\label{eq:lab4_elevation}
 	\ddot{e} + K_3K_{ed}\dot{e} + K_3K_{ep}e = K_3K_{ep}e_c
@@ -63,7 +57,7 @@ Expanding the system defined in \cref{eq:lab2_cont_ss} to include \cref{eq:lab4_
 	}_{\bm u}
 \end{equation}
 
-\subsection{The discretized model}
+\subsubsection{The discretized model}
 Discretizing the continuous system defined in \cref{eq:lab4_cont_ss} was done using the forward Euler method (see \cref{sec:lab2_disc} for more information about this method).
 
 The resulting dicretized system became: 
@@ -87,6 +81,21 @@ The resulting dicretized system became:
 \end{equation}
 where $ T $ is the sample-time.
 
+\subsection{The new optimalization problem}
+The criteria to be minimized was
+\begin{equation}\label{eq:lab4_cost_func}
+	\phi = \sum_{i=0}^{N-1} (\lambda_{i + 1} - \lambda_f)^{2} + q_1 p_{ci}^2 + q_2 e_{ci} ^2
+\end{equation}
+and the constraint on the elevation was:
+\begin{equation}\label{eq:lab4_elevation_constraint}
+	e_k \geq \alpha \text{exp}\left( -\beta (\lambda_k - \lambda_t)^2\right) \forall k \in \left\lbrace 1,...,N\right\rbrace 
+\end{equation}
+
+\subsection{LQ regulator}
+As the results from the previous lab shows adding feedback greatly improves performance, see \cref{kap:task_10_2_experimental_results} - therefore it makes sense to have feedback for this exercise as well.
+
+The LQ regulator was exactly the same as the one describe in \cref{kap:task_10_3_LQ_controller}, but now with expanded state and input as described in \cref{eq:lab4_cont_ss}. This means that $ \bm Q $ was now a diagonal matrix of size 6x6, and $ \bm R $ was a diagonal matrix of 2x2.
+
 \subsection{Experimental results}
 The group's goal was as in the other labs, to make the helicopter follow the optimal trajectory to $ \lambda_f $ as close as possible. Making the helicopter follow the trajectory consisted of two parts: 
 \begin{enumerate}
@@ -95,7 +104,9 @@ The group's goal was as in the other labs, to make the helicopter follow the opt
 \end{enumerate}
 
 \subsubsection{Tuning LQ regulator}
-Before the group started testing the helicopter's response optimal trajectory found using the SQP-algorithm, the LQ regulator used to find the feedback-gain matrix $\bm K$ had to be tuned. The LQ regulator was exactly the same as the one describe in \cref{kap:task_10_3_LQ_controller}, but now with expanded state and input as described in \cref{eq:lab4_cont_ss}. This means that $ \bm Q $ was now a diagonal matrix of size 6x6, and $ \bm R $ was a diagonal matrix of 2x2. Tuning the LQ regulator is a vital part of achieving as good response. Since the elevation is decoupled from the rest of the states, it should been possible to use the tuning from \cref{sec:lab3_result} and find a good tuning for the elevation (i.e. tuning Q(5,5), Q(6,6) and R(2, 2)). However, in reality the helicopter's state is not decoupled (see \cref{sec:lab4_decoupled}), so to achieve good tuning the group had to tune the whole system again.
+Before the group started testing the helicopter's response optimal trajectory found using the SQP-algorithm, the LQ regulator used to find the feedback-gain matrix $\bm K$ had to be tuned.
+
+Tuning the LQ regulator is a vital part of achieving as good response. Since the elevation is decoupled from the rest of the states, it should been possible to use the tuning from \cref{sec:lab3_result} and find a good tuning for the elevation (i.e. tuning Q(5,5), Q(6,6) and R(2, 2)). However, in reality the helicopter's state is not decoupled (see \cref{sec:lab4_decoupled}), so to achieve good tuning the group had to tune the whole system again.
 
 A good rule of thumb is that the LQ regulator should be tuned with an input trajectory that one know the helicopter actually can follow. If the helicopter has an input trajectory that is physical impossible to achieve, the tuning will become hard. Therefore, the group tried to create a moderate input-trajectory which seemed reasonable based on their experience from the lab. However, the task was harder than anticipated, and the group did not have enough time to do this. 
 
