@@ -92,6 +92,38 @@ def plot_different_Q_values(startindex = 0):
 
     return fig, ax
 
+def plot_best_tuning():
+    Q_paths, Q_labels = get_Q_metadata()
+
+    # This is where we can select different runs to plot
+    Q_paths = select_by_index(Q_paths, [1])
+    Q_labels = select_by_index(Q_labels, [1])
+
+    Q_tests = [
+        optlab.open_mat("LAB3/"+path, LABn=3)
+        for path in Q_paths
+    ]
+
+    fig, ax = plt.subplots(nrows=3, ncols=2, sharex=True)
+    ax = list(ax.flatten())
+
+    fig, ax = optlab.plot.plot_comparisons(
+        Q_tests,
+        Q_labels,
+        ['Travel', 'Travelrate', 'Pitch', 'Pitchrate', 'u'],
+        plot_optimal_trajectory=True,
+        xlim=[0, 25],
+        legend_loc='right',
+        fig=fig,
+        ax=ax,
+        forced_xlabel_loc=[4],
+        legend_ncols=5
+    )
+
+    fig.set_size_inches(12, 9)
+
+    return fig, ax
+
 
 if __name__ == '__main__':
     #optlab.enable_pgf_plots()
@@ -100,18 +132,22 @@ if __name__ == '__main__':
     #fig.suptitle("Varying R-values in the LQR regulator")
     #optlab.plot.export_plot("LAB3_R_variations", rect=(0,0.05, 1, 1))
     
-    fig, ax = plot_different_Q_values()
-    fig.suptitle("Varying the Q-parameter related to travel")
-    optlab.plot.export_plot("LAB3_Q_variations", rect=(0,0.05, 1, 1))
+#    fig, ax = plot_different_Q_values()
+#    fig.suptitle("Varying the Q-parameter related to travel")
+#    optlab.plot.export_plot("LAB3_Q_variations", rect=(0,0.05, 1, 1))
+#
+#    fig, ax = plot_different_Q_values(startindex=3)
+#    fig.suptitle("Varying the Q-paramters related to travelrate")
+#    optlab.plot.export_plot("LAB3_Q_variations_travelrate", rect=(0,0.05, 1, 1))
+#
+#    fig, ax = plot_different_Q_values(startindex=6)
+#    fig.suptitle("Varying the Q-paramters related to pitch")
+#    optlab.plot.export_plot("LAB3_Q_variations_pitch", rect=(0,0.05, 1, 1))
+#
+#    fig, ax = plot_different_Q_values(startindex=9)
+#    fig.suptitle("Varying the Q-paramters related to pitchrate")
+#    optlab.plot.export_plot("LAB3_Q_variations_pitchrate", rect=(0,0.05, 1, 1))
 
-    fig, ax = plot_different_Q_values(startindex=3)
-    fig.suptitle("Varying the Q-paramters related to travelrate")
-    optlab.plot.export_plot("LAB3_Q_variations_travelrate", rect=(0,0.05, 1, 1))
-
-    fig, ax = plot_different_Q_values(startindex=6)
-    fig.suptitle("Varying the Q-paramters related to pitch")
-    optlab.plot.export_plot("LAB3_Q_variations_pitch", rect=(0,0.05, 1, 1))
-
-    fig, ax = plot_different_Q_values(startindex=9)
-    fig.suptitle("Varying the Q-paramters related to pitchrate")
-    optlab.plot.export_plot("LAB3_Q_variations_pitchrate", rect=(0,0.05, 1, 1))
+    fig, ac = plot_best_tuning()
+    fig.suptitle("The best tuning result from LAB2")
+    optlab.plot.export_plot("LAB3_best_tuning", rect=(0,0.05, 1, 1))

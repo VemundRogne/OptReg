@@ -155,9 +155,15 @@ Another possible improvement would be to change the cost function in the optimal
 	\caption{Changing the weight of the pitchrate state, $R=1$. This was quite similar to \cref{fig:LAB3_Q_variations_pitch} but there is less oscillation.}
 	\label{fig:LAB3_Q_variations_pitchrate}
 \end{figure}
+
 \subsubsection{Final tuning}
-\todo[inline]{Oppgaven sier: ``.... Justify your choice''. Jeg tolker dette som at vi skal ha en final tuning.}
-\missingfigure{Figure of final tuning}
+The final tuning prioritizes travel, as that is the most important state, while comprimizing on the gain - too low results in a large offset while too high results in too much oscillations.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.8\linewidth]{figures/LAB3_best_tuning.png}
+	\caption{The best tuning of LAB3. This tuning prioritizes travel with a good comprimize between high gain and oscillations.}
+\end{figure}
 
 \clearpage
 
