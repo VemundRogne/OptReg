@@ -12,7 +12,7 @@ The results achieved in this section shows that adding feedback greatly improves
 \subsection{Introducing feedback}
 There are many approaches to adding feedback, but in this assignment only two will be considered: linear state feedback and model predictive control.
 
-\textbf{Linear state feedback} adds a new control layer below the optimization layer, the advanced control layer. This layer controls the pitch setpoint to the basic control layer based on a control law that considers the optimal trajectory and the current state of the system. If the states deviate from the optimal value the input is changed according to the pitch-control equation:
+\textbf{Linear state feedback} adds a new control layer below the optimization layer, the advanced control layer. This layer controls the pitch setpoint to the basic control layer based on a control law that considers the optimal trajectory and the current state of the system\todo{Er det mulig å dele opp setningen noe?}. If the states deviate from the optimal value the input is changed according to the pitch-control equation:
 \begin{equation}\label{eq:lab3_feedback}
 	u_k = u_k^* - \bm{K}^T(\bm x_k - \bm x_k^*)
 \end{equation}
@@ -23,7 +23,7 @@ In this exercise the gain matrix $K$ is calculated as an infinite horizon LQ con
 \textbf{Model Predictive Control (MPC)} is a completely different solution: the optimal trajectory is recalculated at every timestep - instead of compensating for deviation from optimal, the optimal is recalculated to get a new possible trajectory based on the current states. See \cref{kap:10_3_mpc} for more info about how that could be implemented here.
 
 \subsection{LQ controller} \label{kap:task_10_3_LQ_controller}
-A Linear Quadratic (LQ) controller minimizes the quadtratic objective function:
+A Linear Quadratic (LQ) controller minimizes the quadratic objective function:
 \begin{equation}
     J = \sum^\infty_{i=0} \Delta x_{i+1}^\top Q \Delta x_{i+1} + \Delta u_i^\top R \Delta u_i, \quad Q \ge0, \quad R > 0
 \end{equation}
@@ -36,11 +36,11 @@ Here $ \Delta x = x - x^*$ and $\Delta u = u - u^*$ are deviations from the opti
 This formulation is an infinite horizon linear quadratic regulator which has a solution with a constant linear feedback gain, $K$ - which is exactly what was specified previously! Note that this regulator does not have any constraints.
 
 \subsubsection{Choosing the weights}
-The matrix $Q$ and the scalar $R$ are the weights of the optimalization problem. $Q$ determines how much state-deviations should be penalized, while $R$ determines how much input-deviation should be punished. What needs to prioritezed depends on the application.
+The matrix $Q$ and the scalar $R$ are the weights of the optimalization problem. $Q$ determines how much state-deviations should be penalized, while $R$ determines how much input-deviation should be punished\todo{``penalized'' her og siden du bruker det om Q? Eller blir det rart?}. What needs to prioritized depends on the application.
 
-In this case the system is a helicopter where the goal is to control the travel of the helicopter. The travel is the most important state, while travelrate, pitch and pitchrate are secondary. Thus it makes sense to prioritize keeping travel close to the planned trajectory - it is of course not possible to keep all states close to the trajectory. This motivates a \textbf{state-weight} with relatively high value related to travel.
+In this case the system is a helicopter where the goal is to control the travel of the helicopter. The travel is the most important state, while travelrate, pitch and pitchrate are secondary. Thus it makes sense to prioritize keeping travel close to the planned trajectory - it is of course not possible to keep all states close to the trajectory. This motivates a \textbf{state-weight} with relatively high value related to travel.\todo{Meget bra skrevet!}
 
-The input from the LQR regulator is the pitch-setpoint - which in this case does not need to follow the planned optimal trajectory. Thus a low \textbf{input-weight} is warranted. \textit{However} the pitch-setpoint has a constraint but this implementation of LQR does not have any constraints! The result is that input-use could fall outside the constraint imposed on the optimization layer (this is clearly happening in the experiments performed in the lab).
+The input from the LQR regulator is the pitch-setpoint - which in this case does not need to follow the planned optimal trajectory. Thus a low \textbf{input-weight} is warranted\todo[inline]{Kan du si noe om hvorfor? Bare nevne at lavere R gir høyere input og motsatt. Så du skrev om penalize over, men kanskje vi skal forklare at høyere verdier straffer mer? Eller er det overflødig?}. \textit{However} the pitch-setpoint has a constraint but this implementation of LQR does not have any constraints! The result is that input-use could fall outside the constraint imposed on the optimization layer (this is clearly happening in the experiments performed in the lab) \todo{Hvor skjer dette i laben? Mulig å referere til figur? Og hvordan ser man at dette skjer?}.
 
 \subsubsection{Calculating the solution}
 Calculating the solution to the LQR problem is trivial using Matlab:
@@ -66,7 +66,16 @@ Model Predictive Control is another way of introducing feedback to an optimal co
 This is a drastically different approach to the LQ-method impemented in this laboratory exercise.
 
 \subsubsection{Modified Control Hierarchy with MPC}
-Rather than introducing the Advanced Control Layer with the LQ-controller; introducing MPC would introduce the feedback to the Optimization Layer instead. The optimization layer would use the current state value and generate an optimal trajectory to the target, outputting pitch-setpoints to the Basic control layer at every timestep.
+Rather than introducing the Advanced Control Layer with the LQ-controller, introducing MPC would introduce the feedback to the Optimization Layer instead.\todo{Bra forklaring!! Hvis dette med en modifisert figur?} The optimization layer would use the current state value and generate an optimal trajectory to the target, outputting pitch-setpoints to the Basic control layer at every timestep.
+
+\todo[inline]{Denne seksjonen svarer bare på en tredjedel av det spørsmålet spør om:
+
+
+``How would you realize this controller? Discuss advantages and disadvantages with an MPC controller compared to the controller you have implemented. Also, How would the structure in Figure 8 look like if you used MPC.''
+
+
+Her mangler man altså den biten om fordeler/ulemper, samt et bilde av hvordan MPC blir implementert.
+}
 
 \subsection{Experimental results}\label{sec:lab3_result}
 The group performed a host of controlled tests with different tunings within five different targets:
@@ -80,16 +89,19 @@ The group performed a host of controlled tests with different tunings within fiv
 
 It is very clear that introducing feedback produced results much better than the ones achieved without feedback, almost regardless of the tuning of the LQR regulator.
 
-Prioritizing input usage only has a slight effect, the input usage does get slightly closer to the planned trajectory but not by much. This could be pushed further by weighing states lower, but this was not explored as doing so will only result in the same system as the previous lab-exercise where u was exactly the planned trajectory. Interestingely the \textit{pitch-response}, a state, is improved because of the close relation to the setpoint.
+Prioritizing input usage only has a slight effect, the input usage does get slightly closer to the planned trajectory but not by much. This could be pushed further by weighing states lower, but this was not explored as doing so will only result in the same system as the previous lab-exercise where u was exactly the planned trajectory.\todo[inline]{Kult poeng, kan du forklare hvorfor? Jeg skjønner det ikke...} Interestingly the \textit{pitch-response}, a state, is improved because of the close relation to the setpoint. \todo [inline]{Setpoint til hva? Kanskje fjerne ``a state''; det burde man jo skjønne ut fra pitch-response?}
 
-Prioritizing travel has a great effect on the travel - resulting in almost perfect travel response. Unfortunately this also introduced oscillations in pitch-setpoint, pitch and pitchrate.
+Prioritizing travel has a great effect on the travel response - resulting in almost perfect travel response. Unfortunately this also introduced oscillations in pitch-setpoint, pitch and pitchrate.
+\todo[inline]{Blir det oscillering i pitch setpoint også? Det vises vell ikke i plottene?}
 
-Prioritizing travelrate, pitch and pitchrate results in resonses closer to the planned trajectory, but this is not further discussed as travel is the state most important to control - theese experiments were only to show that it would be possble should another state be valuable.
+Prioritizing travelrate, pitch and pitchrate results in responses closer to the planned trajectory\todo[inline]{Til korresponderende traj., eller travel traj?}, but this is not further discussed as travel is the state most important to control - theese experiments were only to show that it would be possble should another state be valuable.
 
 \subsubsection{Possible improvements}
 The group observed that the state never reached the optimal trajectory, even with very high Q-values. The group believes that adding integration to the LQ-regulator would eliminate the stationary offset between travel and the planned travel trajectory. 
 
-Another improvement is to impose a constraint on the input-use on the advanced control layer to respect the maximum pitch-setpoint stipulated in the problem description. This could either be achieved using a different feedback strategy, or by simply saturating the input. If the simple limiting saturation is chosen then it would make sense to set the optimizatoin layers constraint slightly lower to limit the saturation.
+Another improvement is to impose a constraint on the input-use on the advanced control layer to respect the maximum pitch-setpoint stipulated in the problem description.\todo[inline]{Komplisert setning, jeg sliter med å forstå hva den betyr...} This could either be achieved using a different feedback strategy, or by simply saturating the input. If the simple limiting saturation is chosen then it would make sense to set the optimizatoin layers constraint slightly lower to limit the saturation.
+
+\todo[inline]{Kan det være lurt å nevne at vi også kan endre q i cost function slik vi får en mer realiserbar optimal trajectory?}
 
 \subsubsection{Plots}
 
@@ -127,7 +139,9 @@ Another improvement is to impose a constraint on the input-use on the advanced c
 	\caption{Changing the weight of the pitchrate state, $R=1$. This was quite similar to \cref{fig:LAB3_Q_variations_pitch} but there is less oscillation.}
 	\label{fig:LAB3_Q_variations_pitchrate}
 \end{figure}
-
+\subsubsection{Final tuning}
+\todo[inline]{Oppgaven sier: ``.... Justify your choice''. Jeg tolker dette som at vi skal ha en final tuning.}
+\missingfigure{Figure of final tuning}
 
 \clearpage
 
