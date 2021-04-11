@@ -70,18 +70,26 @@ Model Predictive Control is another way of introducing feedback to an optimal co
 
 This is a drastically different approach to the LQ-method impemented in this laboratory exercise.
 
+\subsubsection{Implementing MPC}
+Implementing MPC requires a system model, cost function, current state and input control.
+
+One could make a Matlab function that the simulink model uses at every timestep. The input to this function is the current state (either measured or estimated), while the output is connected to the pitch-regulator. The function itself has a model of the system as well as the cost function - with the state from the system the optimalization problem can be solved and the first system-input is returned to the simulink model. 
+
+\subsubsection{Advantages of MPC}
+The biggest advantage of MPC compared to the linear state feedback introduced here is that MPC generates a new optimal trajectory that is possible to achieve - this is very imporant.
+
+Imagine a situation where the helicopter needs to fly below some obstacle. A deviation in elevation that would cause a collision with the obstacle might not be corrected before travel reaches the obstacle - MPC would slow down travel enough to have a trajectory that is possible to achieve.
+
+\subsubsection{Disadvantages of MPC}
+The biggest disadvantage to MPC is complexity and computation time - in a control system there are hard deadlines and if the optimalization problem has not been solved in that deadline the system has a problem.
+
+First of all the problem must be simple enough or optimized enough to solve at every timestep, else the problem must be simplified, optimized or the timestep must be increased. The time to solve a problem can also vary, which makes this issue more complex.
+
+Another issue is \textbf{existance of solutions} must be guaranteed for all situations. It is possible to have problems that have solutions in some state and reference values, while being undefined for others. This could cause the helicopter to freeze mid-air because there was no solution.
+
 \subsubsection{Modified Control Hierarchy with MPC}
-Rather than introducing the Advanced Control Layer with the LQ-controller, introducing MPC would introduce the feedback to the Optimization Layer instead.\todo{Bra forklaring!! Hvis dette med en modifisert figur?} The optimization layer would use the current state value and generate an optimal trajectory to the target, outputting pitch-setpoints to the Basic control layer at every timestep.
 
-\todo[inline]{Denne seksjonen svarer bare på en tredjedel av det spørsmålet spør om:
-
-
-``How would you realize this controller? Discuss advantages and disadvantages with an MPC controller compared to the controller you have implemented. Also, How would the structure in Figure 8 look like if you used MPC.
-''
-
-
-Her mangler man altså den biten om fordeler/ulemper, samt et bilde av hvordan MPC blir implementert.
-}
+\missingfigure{Modified control hierarchy}
 
 \subsection{Experimental results}\label{sec:lab3_result}
 The group performed a host of controlled tests with different tunings within five different targets:
