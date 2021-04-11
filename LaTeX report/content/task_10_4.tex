@@ -104,13 +104,14 @@ The group's goal was as in the other labs, to make the helicopter follow the opt
 \end{enumerate}
 
 \subsubsection{Tuning LQ regulator}
-Before the group started testing the helicopter's response optimal trajectory found using the SQP-algorithm, the LQ regulator used to find the feedback-gain matrix $\bm K$ had to be tuned. \todo{Jeg forstår ikke denne setningen}
+%Before the group started testing the helicopter's response optimal trajectory found using the SQP-algorithm, the LQ regulator used to find the feedback-gain matrix $\bm K$ had to be tuned. 
+\todo{Jeg forstår ikke denne setningen. EDIT: Jeg fjernet den, synes ikke den var nyttig}
 
 Tuning the LQ regulator is a vital part of achieving as good response. Since the elevation is decoupled from the rest of the states, it should been possible to use the tuning from \cref{sec:lab3_result} and find a good tuning for the elevation (i.e. tuning Q(5,5), Q(6,6) and R(2, 2)). However, in reality the helicopter's state is not decoupled (see \cref{sec:lab4_decoupled}), so to achieve good tuning the group had to tune the whole system again.
 
-A good rule of thumb is that the LQ regulator should be tuned with an input trajectory that one know the helicopter actually can follow. If the helicopter has an input trajectory that is physical impossible to achieve, the tuning will become hard. \todo{vanskelig formulert. Kanksje: It is hard to tune a regulator with an input trajectory that is physcically impossible to acheive} Therefore, the group tried to create a moderate input-trajectory which seemed reasonable based on their experience from the lab. However, the task was harder than anticipated, and the group did not have enough time to do this. 
+A good rule of thumb is that the LQ regulator should be tuned with an input trajectory that one know the helicopter actually can follow. It is hard to tune a regulator with an input trajectory that is physically impossible to achieve. Therefore, the group tried to create a moderate input-trajectory which seemed reasonable based on their experience from the lab. However, the task was harder than anticipated, and the group did not have enough time to do this. 
 
-Since the group was not able to make a tuning-trajectory for the states and inputs, an optimal trajectory from solving the optimization problem using $q_1 = q_2 = 1$ in the cost function, was used as a replacement. This gave the optimal trajectories shown in \cref{fig:lab4_opt_trajectory}
+Since the group was not able to make a tuning-trajectory for the states and inputs, an optimal trajectory from solving the optimization problem using $q_1 = q_2 = 1$ in the cost function, was used as a replacement. This gave the optimal trajectories shown in \cref{fig:lab4_opt_trajectory}. The bump in the optimal trajectory for elevation comes from the constraint defined by \cref{eq:lab4_elevation_constraint}. \todo{Kanskje heller nevne dette sammen med reference trajectory plottet. \cref{fig:lab4_opt_trajectory}. EDIT: DONE}
 
 \begin{figure}[h]
 	\centering
@@ -119,7 +120,11 @@ Since the group was not able to make a tuning-trajectory for the states and inpu
 	\label{fig:lab4_opt_trajectory}
 \end{figure}
 
-In the tuning process we decided to keep $ \bm R $ and $ \bm Q $ as diagonal matrices. $ \bm R $ was set constant equal the identity matrix, i.e. $\bm R = \bm I_2$. The diagonal elements of $ \bm Q $ was then changed to get a good tuning. As in \todo{cref lab3 lqr tuning}each diagonal entry in Q corresponds to the corresponding state in \cref{eq:lab4_cont_ss}. This makes the tuning process simpler since a change in an entry $ \bm Q $ has an expected impact on the response. Higher values of $ \bm Q $ results in inputs with larger magnitude, which again gives a faster response. Having too small values on the diagonal of $ \bm Q $ will therefor give a slow response. Having too large values on the diagonal of $ \bm Q $ will also have unwanted effects as the helicopter approaches a less stable tuning. This is shown in \cref{fig:lab4_diff_Q_values} where the entry corresponding to the travel response was changed, i.e. Q(1, 1). Changing this entry changes the pitch input, as travel and pitch are directly related. Low values at Q(1, 1) gives a slower response for travel, and higher values at Q(1, 1) gives faster response. Higher values also makes a more oscillating response (especially for the pitch) for the states. The oscillations are noticeable in the real world as a shaking helicopter, and is an unwanted effect. \todo{Kanskje litt langt avsnitt, jeg faller ihvertfall fort av. Typisk leser de fleste kun en eller to setninger per avsnitt (ihvertfall når det skumleses) - da er det viktig å splitte opp og få frem det viktigeste først}
+In the tuning process we decided to keep $ \bm R $ and $ \bm Q $ as diagonal matrices. $ \bm R $ was set constant equal the identity matrix, i.e. $\bm R = \bm I_2$. The diagonal elements of $ \bm Q $ was then changed to get a good tuning. 
+The tuning process with the new system, was based on the exact same principles as the tuning process in \cref{sec:lab3}: Each diagonal entry of $ \bm Q $ and $ \bm R $ decides how much the corresponding response of the state/input shall be penalized. Larger values in an entry for $ \bm Q $ gives faster response (or equivalently; uses more input). Too large values gives unwanted effects as oscillations. \todo{EDIT: Dette er nytt. OK?}
+%As in each diagonal entry in Q corresponds to the corresponding state in \cref{eq:lab4_cont_ss}. This makes the tuning process simpler since a change in an entry $ \bm Q $ has an expected impact on the response. Higher values of $ \bm Q $ results in inputs with larger magnitude, which again gives a faster response. Having too small values on the diagonal of $ \bm Q $ will therefor give a slow response. Having too large values on the diagonal of $ \bm Q $ will also have unwanted effects as the helicopter approaches a less stable tuning. 
+This is shown in \cref{fig:lab4_diff_Q_values} where the entry corresponding to the travel response was changed, i.e. Q(1, 1). Low values at Q(1, 1) gives a slower response for travel, and higher values at Q(1, 1) gives faster response. Too high values gives oscillations in pitch and pitch rate. The oscillations are noticeable in the real world as a shaking helicopter, and is an unwanted effect. 
+%\todo{Kanskje litt langt avsnitt, jeg faller ihvertfall fort av. Typisk leser de fleste kun en eller to setninger per avsnitt (ihvertfall når det skumleses) - da er det viktig å splitte opp og få frem det viktigeste først}
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=\linewidth]{figures/LAB4_travel_gains.png}
@@ -127,9 +132,17 @@ In the tuning process we decided to keep $ \bm R $ and $ \bm Q $ as diagonal mat
 	\label{fig:lab4_diff_Q_values}
 \end{figure}
 
-\todo[inline]{Plottet som viser tuning av elevation er helt borte, langt nede i teksten. Kanskje nice å skrive om den også?}
+As elevation was added to the model, the group also tested the effect of changing the weights for the elevation. This is shown in \cref{fig:lab4_diff_elevation_values}. Prioritizing elevation by increasing Q(5, 5) gave, as expected, a faster elevation-response. \todo{EDIT: La til dette, hva synes du?}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{figures/LAB4_elevation_gains.png}
+	\caption{Plot showing the effect of varying the entry in $ \bm Q $ related to elevation. The travel-gain in $ \bm Q $ is 15, while the other values are 1.}
+	\label{fig:lab4_diff_elevation_values}
+\end{figure}
 
-Using the same approach as in \todo{cref lab 3 }the group tuned entry-by-entry in $ \bm Q $. In the end the best tuning was achieved using: 
+\todo[inline]{Plottet som viser tuning av elevation er helt borte, langt nede i teksten. Kanskje nice å skrive om den også? SVAR: Hva skal jeg skrive om her? Jeg fjernet det fordi jeg ikke klarte å skrive noe relevant om det...}
+
+Using the same approach as in \cref{sec:lab3}, the group tuned entry-by-entry in $ \bm Q $. In the end the best tuning was achieved using: 
 \begin{equation}\label{key}
 	\bm Q = \begin{bmatrix}
 		15 & 0 & 0 & 0 & 0 \\
@@ -151,7 +164,6 @@ This gave the results in \cref{fig:LAB4_best_tuning}
 	\caption{Best tuning of the LQ regulator in lab 4.}
 	\label{fig:LAB4_best_tuning}
 \end{figure}
-The bump in the optimal trajectory for elevation comes from the constraint defined by \cref{eq:lab4_elevation_constraint}. \todo{Kanskje heller nevne dette sammen med reference trajectory plottet. \cref{fig:lab4_opt_trajectory}}
 
 \subsubsection{Finding a reasonable trajectory}
 The group had two criterions on what defined a reasonable trajectory:
@@ -159,7 +171,7 @@ The group had two criterions on what defined a reasonable trajectory:
 	\item The trajectory created should be physical possible (or at least close to possible) for the helicopter to achieve.
 	\item The time used to go from $ \lambda_0 $ to $ \lambda_f $ should be as small as possible.
 \end{enumerate}
-The group tested different values for $ q_1 $ and $ q_2 $ in \cref{eq:lab4_cost_func}. In the end, the result shown in \cref{fig:LAB4_best_tuning} fulfilled both these criterions well compared to other configurations, so the group decided that using $ q_1 = q_2 = 1 $ was a fair trajectory. Even though there are some error in the pitch and elevation response, the travel response becomes good which was our main focus during tuning.
+The group tested different values for $ q_1 $ and $ q_2 $ in \cref{eq:lab4_cost_func}. In the end, the result shown in \cref{fig:LAB4_best_tuning} fulfilled both these criterions well compared to other configurations, so the group decided that using $ q_1 = q_2 = 1 $ was a fair trajectory. Even though there are some error in the pitch and elevation response, the travel response becomes good which was the main focus during tuning.
 
 \subsection{Decoupled model} \label{sec:lab4_decoupled}
 As states in the problem description, the two last states are completely decoupled from the first four states. Or put in other words, the dynamics describing elevation is completely independent on the pitch and travel. This is of course not the case in reality, and illustrates how simplicity of the model!
@@ -202,12 +214,6 @@ A simple force analysis will show that the states are not decoupled as described
 Also there is a lot of rotational forces that have not been considered in the model. E.g. the travel rate $ r $ will create a centripetal force going along the helicopter arm, and point inwards to the origin of the arm. If the helicopter arm is not completely horizontal, this centripetal force will have a component in the direction of the elevation. The main point is that our model is a very simplified version of the real physics of the helicopter. In reality the helicopter is a complex system, which we can never define 100 \% exact with a mathematical formulation.
 
 The effect this has on our optimal trajectory, is that our solver considers elevation as a system that is completely independent on the other states. This can of course be turned the other way around, as the optimal pitch- and travel-trajectory are also independent on the optimal elevation trajectory. The optimal trajectories are therefore ``wrong'', since the elevation is clearly not independent on the other states! It is wrong in the sense that the optimal trajectories may be impossible to achieve in the real world. The decoupled model will always model the elevation for a helicopter where pitch, travel and elevation are all zero(the linearization point). I.e. it will always model a helicopter where the rotor forces points directly upwards. Therefore, the further away the helicopter is from the linearization point, the larger the error due to the decoupled model becomes. 
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=\linewidth]{figures/LAB4_elevation_gains.png}
-	\caption{Plot showing the effect of varying the entry in $ \bm Q $ related to elevation. The travel-gain in $ \bm Q $ is 15, while the other values are 1.}
-	\label{fig:lab4_diff_elevation_values}
-\end{figure}
 
 \subsubsection{Possible solutions}
 There are no correct solution to this problem, as we will never be able to describe the real-world system exact with mathematical formulations. There are however, some ``solutions'' that will improve our system and reduce the errors that arises from our decoupled model.
